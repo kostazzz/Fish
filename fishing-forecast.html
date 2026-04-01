@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Прогноз клёва — Пабрада</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300..700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/luxon@3/build/global/luxon.min.js"></script>
+<style>
+/* ===== DESIGN TOKENS ===== */
+:root, [data-theme="light"] {
+  --color-bg: #f7f6f2;
+  --color-surface: #f9f8f5;
+  --color-surface-2: #fbfbf9;
+  --color-surface-offset: #f3f0ec;
+  --color-surface-dynamic: #e6e4df;
+  --color-divider: #dcd9d5;
+  --color-border: #d4d1ca;
+  --color-text: #28251d;
+  --color-text-muted: #7a7974;
+  --color-text-faint: #bab9b4;
+  --color-text-inverse: #f9f8f4;
+  --color-primary: #01696f;
+  --color-primary-hover: #0c4e54;
+  --color-primary-highlight: #cedcd8;
+  --color-success: #437a22;
+  --color-success-highlight: #d4dfcc;
+  --color-warning: #964219;
+  --color-warning-highlight: #ddcfc6;
+  --color-error: #a12c7b;
+  --color-error-highlight: #e0ced7;
+  --color-gold: #d19900;
+  --color-gold-highlight: #e9e0c6;
+  --color-blue: #006494;
+  --shadow-sm: 0 1px 2px oklch(0.2 0.01 80 / 0.06);
+  --shadow-md: 0 4px 12px oklch(0.2 0.01 80 / 0.08);
+  --shadow-lg: 0 12px 32px oklch(0.2 0.01 80 / 0.12);
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-full: 9999px;
+  --font-display: 'Instrument Serif', Georgia, serif;
+  --font-body: 'Inter', 'Helvetica Neue', sans-serif;
+  --text-xs: clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem);
+  --text-sm: clamp(0.875rem, 0.8rem + 0.35vw, 1rem);
+  --text-base: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+  --text-lg: clamp(1.125rem, 1rem + 0.75vw, 1.5rem);
+  --text-xl: clamp(1.5rem, 1.2rem + 1.25vw, 2.25rem);
+  --text-2xl: clamp(2rem, 1.2rem + 2.5vw, 3.5rem);
+  --space-1: 0.25rem; --space-2: 0.5rem; --space-3: 0.75rem; --space-4: 1rem;
+  --space-5: 1.25rem; --space-6: 1.5rem; --space-8: 2rem; --space-10: 2.5rem;
+  --space-12: 3rem; --space-16: 4rem;
+  --transition-interactive: 180ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+[data-theme="dark"] {
+  --color-bg: #171614;
+  --color-surface: #1c1b19;
+  --color-surface-2: #201f1d;
+  --color-surface-offset: #1d1c1a;
+  --color-surface-dynamic: #2d2c2a;
+  --color-divider: #262523;
+  --color-border: #393836;
+  --color-text: #cdccca;
+  --color-text-muted: #797876;
+  --color-text-faint: #5a5957;
+  --color-text-inverse: #2b2a28;
+  --color-primary: #4f98a3;
+  --color-primary-hover: #227f8b;
+  --color-primary-highlight: #313b3b;
+  --color-success: #6daa45;
+  --color-success-highlight: #3a4435;
+  --color-warning: #bb653b;
+  --color-warning-highlight: #564942;
+  --color-error: #d163a7;
+  --color-error-highlight: #4c3d46;
+  --color-gold: #e8af34;
+  --color-gold-highlight: #4d4332;
+  --color-blue: #5591c7;
+  --shadow-sm: 0 1px 2px oklch(0 0 0 / 0.2);
+  --shadow-md: 0 4px 12px oklch(0 0 0 / 0.3);
+  --shadow-lg: 0 12px 32px oklch(0 0 0 / 0.4);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    --color-bg: #171614; --color-surface: #1c1b19; --color-surface-2: #201f1d;
+    --color-surface-offset: #1d1c1a; --color-surface-dynamic: #2d2c2a;
+    --color-divider: #262523; --color-border: #393836;
+    --color-text: #cdccca; --color-text-muted: #797876; --color-text-faint: #5a5957;
+    --color-text-inverse: #2b2a28; --color-primary: #4f98a3; --color-primary-hover: #227f8b;
+    --color-primary-highlight: #313b3b; --color-success: #6daa45; --color-success-highlight: #3a4435;
+    --color-warning: #bb653b; --color-warning-highlight: #564942;
+    --color-error: #d163a7; --color-error-highlight: #4c3d46;
+    --color-gold: #e8af34; --color-gold-highlight: #4d4332;
+    --color-blue: #5591c7;
+    --shadow-sm: 0 1px 2px oklch(0 0 0 / 0.2);
+    --shadow-md: 0 4px 12px oklch(0 0 0 / 0.3);
+    --shadow-lg: 0 12px 32px oklch(0 0 0 / 0.4);
+  }
+}
+
+/* ===== BASE ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { -webkit-font-smoothing: antialiased; scroll-behavior: smooth; }
+body {
+  min-height: 100dvh;
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  color: var(--color-text);
+  background-color: var(--color-bg);
+  line-height: 1.6;
+}
+img { display: block; max-width: 100%; }
+button { cursor: pointer; background: none; border: none; font: inherit; color: inherit; }
+a, button { transition: color var(--transition-interactive), background var(--transition-interactive), opacity var(--transition-interactive); }
+
+/* ===== LAYOUT ===== */
+.app { max-width: 960px; margin-inline: auto; padding: var(--space-8) var(--space-4); }
+@media (min-width: 768px) { .app { padding: var(--space-12) var(--space-8); } }
+
+/* ===== HEADER ===== */
+.header { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-10); }
+.logo { display: flex; align-items: center; gap: var(--space-3); }
+.logo-text { font-family: var(--font-display); font-size: var(--text-lg); color: var(--color-text); }
+.logo-text span { color: var(--color-primary); }
+.header-meta { display: flex; align-items: center; gap: var(--space-3); }
+.location-badge {
+  font-size: var(--text-xs); color: var(--color-text-muted);
+  background: var(--color-surface); border: 1px solid var(--color-border);
+  padding: var(--space-1) var(--space-3); border-radius: var(--radius-full);
+}
+.theme-toggle {
+  width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;
+  border-radius: var(--radius-full); background: var(--color-surface);
+  border: 1px solid var(--color-border); color: var(--color-text-muted);
+}
+.theme-toggle:hover { color: var(--color-text); background: var(--color-surface-dynamic); }
+
+/* ===== LOADING ===== */
+.loading-wrap { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 40vh; gap: var(--space-4); color: var(--color-text-muted); font-size: var(--text-sm); }
+.spinner { width: 32px; height: 32px; border: 2px solid var(--color-border); border-top-color: var(--color-primary); border-radius: 50%; animation: spin 0.8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ===== TODAY HERO ===== */
+.today-hero {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  padding: var(--space-8);
+  margin-bottom: var(--space-6);
+  box-shadow: var(--shadow-md);
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: var(--space-6);
+  align-items: start;
+}
+@media (max-width: 600px) { .today-hero { grid-template-columns: 1fr; } }
+.today-label { font-size: var(--text-xs); text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-text-muted); margin-bottom: var(--space-2); }
+.today-title { font-family: var(--font-display); font-size: var(--text-xl); color: var(--color-text); margin-bottom: var(--space-1); }
+.today-date { font-size: var(--text-sm); color: var(--color-text-muted); margin-bottom: var(--space-6); }
+.today-metrics { display: flex; flex-wrap: wrap; gap: var(--space-4); }
+.metric {
+  display: flex; flex-direction: column; gap: 2px;
+  background: var(--color-surface-offset); border-radius: var(--radius-lg);
+  padding: var(--space-3) var(--space-4); min-width: 90px;
+  border: 1px solid oklch(from var(--color-text) l c h / 0.06);
+}
+.metric-label { font-size: var(--text-xs); color: var(--color-text-muted); }
+.metric-value { font-size: var(--text-base); font-weight: 600; font-variant-numeric: tabular-nums; }
+.metric-sub { font-size: var(--text-xs); color: var(--color-text-muted); }
+
+/* ===== SCORE RING ===== */
+.score-wrap { display: flex; flex-direction: column; align-items: center; gap: var(--space-2); }
+.score-ring-container { position: relative; width: 110px; height: 110px; }
+.score-ring-container svg { transform: rotate(-90deg); }
+.score-ring-bg { fill: none; stroke: var(--color-surface-dynamic); stroke-width: 8; }
+.score-ring-fill { fill: none; stroke-width: 8; stroke-linecap: round; transition: stroke-dashoffset 1s cubic-bezier(0.16,1,0.3,1); }
+.score-center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.score-number { font-size: 1.75rem; font-weight: 700; line-height: 1; font-variant-numeric: tabular-nums; }
+.score-max { font-size: var(--text-xs); color: var(--color-text-muted); }
+.score-label { font-size: var(--text-sm); font-weight: 500; text-align: center; max-width: 100px; }
+
+/* ===== FACTOR BARS ===== */
+.factors-section { margin-bottom: var(--space-6); }
+.section-title { font-size: var(--text-sm); font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; color: var(--color-text-muted); margin-bottom: var(--space-4); }
+.factors-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: var(--space-3); }
+.factor-card {
+  background: var(--color-surface); border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg); padding: var(--space-4);
+  box-shadow: var(--shadow-sm);
+}
+.factor-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-2); }
+.factor-name { font-size: var(--text-sm); color: var(--color-text-muted); }
+.factor-val { font-size: var(--text-sm); font-weight: 600; font-variant-numeric: tabular-nums; }
+.factor-bar-bg { height: 4px; background: var(--color-surface-dynamic); border-radius: var(--radius-full); overflow: hidden; margin-bottom: var(--space-2); }
+.factor-bar-fill { height: 100%; border-radius: var(--radius-full); transition: width 0.8s cubic-bezier(0.16,1,0.3,1); }
+.factor-verdict { font-size: var(--text-xs); color: var(--color-text-muted); }
+
+/* ===== FORECAST CARDS ===== */
+.forecast-section { margin-bottom: var(--space-6); }
+.forecast-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-3); }
+@media (max-width: 600px) { .forecast-grid { grid-template-columns: 1fr; } }
+.forecast-card {
+  background: var(--color-surface); border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg); padding: var(--space-5);
+  box-shadow: var(--shadow-sm); text-align: center;
+}
+.forecast-day { font-size: var(--text-sm); font-weight: 600; margin-bottom: var(--space-1); }
+.forecast-date { font-size: var(--text-xs); color: var(--color-text-muted); margin-bottom: var(--space-3); }
+.forecast-score-badge {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 52px; height: 52px; border-radius: 50%; font-size: 1.1rem;
+  font-weight: 700; margin-bottom: var(--space-3); border: 2px solid;
+}
+.forecast-metrics { display: flex; flex-direction: column; gap: var(--space-1); font-size: var(--text-xs); color: var(--color-text-muted); }
+.forecast-metric-row { display: flex; justify-content: space-between; }
+.forecast-metric-row b { color: var(--color-text); font-weight: 500; }
+
+/* ===== PRESSURE CHART ===== */
+.chart-section { margin-bottom: var(--space-6); }
+.chart-wrap {
+  background: var(--color-surface); border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl); padding: var(--space-6);
+  box-shadow: var(--shadow-md);
+}
+.chart-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-5); flex-wrap: wrap; gap: var(--space-2); }
+.chart-title { font-size: var(--text-base); font-weight: 600; }
+.chart-legend { display: flex; gap: var(--space-4); }
+.legend-item { display: flex; align-items: center; gap: var(--space-2); font-size: var(--text-xs); color: var(--color-text-muted); }
+.legend-dot { width: 8px; height: 8px; border-radius: 50%; }
+.chart-canvas-wrap { position: relative; height: 200px; }
+
+/* ===== PRESSURE DELTA HISTORY ===== */
+.history-section { margin-bottom: var(--space-6); }
+.history-table { width: 100%; border-collapse: collapse; font-size: var(--text-sm); font-variant-numeric: tabular-nums; }
+.history-table th { text-align: left; color: var(--color-text-muted); font-weight: 500; font-size: var(--text-xs); text-transform: uppercase; letter-spacing: 0.05em; padding: var(--space-2) var(--space-3); border-bottom: 1px solid var(--color-divider); }
+.history-table td { padding: var(--space-2) var(--space-3); border-bottom: 1px solid oklch(from var(--color-text) l c h / 0.05); }
+.delta-chip { display: inline-flex; align-items: center; gap: 3px; padding: 1px var(--space-2); border-radius: var(--radius-full); font-size: var(--text-xs); font-weight: 500; }
+
+/* ===== GUIDE ===== */
+.guide-section { margin-bottom: var(--space-8); }
+.guide-card {
+  background: var(--color-surface); border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl); padding: var(--space-6);
+  box-shadow: var(--shadow-sm);
+}
+.guide-title { font-size: var(--text-base); font-weight: 600; margin-bottom: var(--space-4); }
+.guide-row { display: flex; align-items: flex-start; gap: var(--space-3); padding: var(--space-3) 0; border-bottom: 1px solid var(--color-divider); }
+.guide-row:last-child { border-bottom: none; }
+.guide-icon { font-size: 1.2rem; flex-shrink: 0; margin-top: 2px; }
+.guide-text { flex: 1; }
+.guide-factor { font-size: var(--text-sm); font-weight: 600; margin-bottom: 2px; }
+.guide-desc { font-size: var(--text-xs); color: var(--color-text-muted); }
+.guide-ideal { font-size: var(--text-xs); color: var(--color-success); margin-top: 2px; }
+
+/* ===== FOOTER ===== */
+.footer { text-align: center; font-size: var(--text-xs); color: var(--color-text-faint); padding-top: var(--space-6); border-top: 1px solid var(--color-divider); }
+.footer a { color: var(--color-text-muted); text-decoration: underline; text-decoration-color: transparent; }
+.footer a:hover { text-decoration-color: currentColor; }
+
+/* ===== COLOR UTILS ===== */
+.c-good { color: var(--color-success); }
+.c-ok   { color: var(--color-gold); }
+.c-bad  { color: var(--color-warning); }
+.c-primary { color: var(--color-primary); }
+.bg-good { background: var(--color-success-highlight); border-color: var(--color-success); }
+.bg-ok   { background: var(--color-gold-highlight);    border-color: var(--color-gold); }
+.bg-bad  { background: var(--color-warning-highlight); border-color: var(--color-warning); }
+
+/* ===== ERROR ===== */
+.error-state { text-align: center; padding: var(--space-16) var(--space-8); color: var(--color-text-muted); }
+.error-state h3 { color: var(--color-error); margin-bottom: var(--space-2); }
+
+/* ===== REDUCED MOTION ===== */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
+</style>
+</head>
+<body>
+
+<main class="app">
+  <!-- Header -->
+  <header class="header">
+    <div class="logo">
+      <svg width="32" height="32" viewBox="0 0 32 32" fill="none" aria-label="Логотип рыбалки">
+        <circle cx="16" cy="16" r="14" stroke="var(--color-primary)" stroke-width="2"/>
+        <path d="M8 18 Q12 10 16 14 Q20 18 24 10" stroke="var(--color-primary)" stroke-width="2" stroke-linecap="round" fill="none"/>
+        <circle cx="8" cy="18" r="2.5" fill="var(--color-primary)" opacity="0.6"/>
+        <path d="M24 10 L26 8 M24 10 L22 9" stroke="var(--color-primary)" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+      <span class="logo-text">Клёв<span>.</span>live</span>
+    </div>
+    <div class="header-meta">
+      <span class="location-badge">📍 Пабрада, LT</span>
+      <button class="theme-toggle" data-theme-toggle aria-label="Переключить тему">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Dynamic content -->
+  <div id="app-content">
+    <div class="loading-wrap">
+      <div class="spinner"></div>
+      <span>Загружаю погодные данные…</span>
+    </div>
+  </div>
+</main>
+
+<script>
+// ===== CONFIG =====
+const LAT = 54.9827, LON = 25.7671;
+const CITY = 'Пабрада';
+
+// ===== THEME TOGGLE =====
+(function(){
+  const t = document.querySelector('[data-theme-toggle]');
+  const r = document.documentElement;
+  let d = matchMedia('(prefers-color-scheme:dark)').matches ? 'dark' : 'light';
+  r.setAttribute('data-theme', d);
+  const sunIcon = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>';
+  const moonIcon = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
+  const updateIcon = () => { if(t) t.innerHTML = d === 'dark' ? sunIcon : moonIcon; };
+  updateIcon();
+  if(t) t.addEventListener('click', () => { d = d==='dark'?'light':'dark'; r.setAttribute('data-theme',d); updateIcon(); });
+})();
+
+// ===== SCORING ENGINE =====
+function calcFishingScore(data) {
+  let score = 0;
+  const breakdown = [];
+
+  // 1. Pressure delta (max 25pts)
+  const delta = Math.abs(data.pressureDelta24h);
+  let pScore, pVerdict;
+  if (delta < 1) { pScore = 25; pVerdict = 'Стабильно — отлично'; }
+  else if (delta < 3) { pScore = 20; pVerdict = 'Слабый сдвиг — хорошо'; }
+  else if (delta < 6) { pScore = 10; pVerdict = 'Заметный скачок — средне'; }
+  else { pScore = 0; pVerdict = 'Резкий скачок — плохо'; }
+  breakdown.push({ name: 'Давление (Δ)', value: `${delta > 0 ? (data.pressureDelta24h > 0 ? '+' : '') : '±'}${data.pressureDelta24h.toFixed(1)} гПа`, score: pScore, max: 25, verdict: pVerdict, pct: delta < 1 ? 100 : delta < 3 ? 80 : delta < 6 ? 40 : 5 });
+  score += pScore;
+
+  // 2. Water temp proxy (air temp, max 25pts)
+  const t = data.airTemp;
+  let tScore, tVerdict;
+  if (t >= 10 && t <= 20) { tScore = 25; tVerdict = 'Идеальный диапазон'; }
+  else if (t >= 5 && t < 10) { tScore = 18; tVerdict = 'Прохладно — клёв есть'; }
+  else if (t > 20 && t <= 26) { tScore = 18; tVerdict = 'Тепло — активно'; }
+  else if (t >= 2 && t < 5) { tScore = 10; tVerdict = 'Холодно — медленно'; }
+  else if (t > 26) { tScore = 8; tVerdict = 'Жарко — рыба глубоко'; }
+  else { tScore = 3; tVerdict = 'Мороз — вялый клёв'; }
+  breakdown.push({ name: 'Температура', value: `${t.toFixed(1)}°C`, score: tScore, max: 25, verdict: tVerdict, pct: tScore/25*100 });
+  score += tScore;
+
+  // 3. Cloud cover (max 20pts)
+  const cc = data.cloudCover;
+  let cScore, cVerdict;
+  if (cc >= 60 && cc <= 100) { cScore = 20; cVerdict = 'Пасмурно — отлично'; }
+  else if (cc >= 30) { cScore = 14; cVerdict = 'Переменно — неплохо'; }
+  else { cScore = 7; cVerdict = 'Ясно — рыба прячется'; }
+  breakdown.push({ name: 'Облачность', value: `${Math.round(cc)}%`, score: cScore, max: 20, verdict: cVerdict, pct: cScore/20*100 });
+  score += cScore;
+
+  // 4. Wind (max 20pts)
+  const w = data.windSpeed;
+  let wScore, wVerdict;
+  if (w >= 3 && w <= 6) { wScore = 20; wVerdict = 'Лёгкий бриз — лучшее'; }
+  else if (w > 6 && w <= 9) { wScore = 13; wVerdict = 'Умеренный — норма'; }
+  else if (w < 3) { wScore = 10; wVerdict = 'Штиль — пассивно'; }
+  else { wScore = 3; wVerdict = 'Сильный ветер — плохо'; }
+  breakdown.push({ name: 'Ветер', value: `${w.toFixed(1)} м/с`, score: wScore, max: 20, verdict: wVerdict, pct: wScore/20*100 });
+  score += wScore;
+
+  // 5. Rain (max 10pts)
+  const r = data.rain;
+  let rScore, rVerdict;
+  if (r > 0 && r <= 3) { rScore = 10; rVerdict = 'Морось — активизирует'; }
+  else if (r === 0) { rScore = 7; rVerdict = 'Без осадков — нейтрально'; }
+  else { rScore = 2; rVerdict = 'Ливень — плохо'; }
+  breakdown.push({ name: 'Осадки', value: r > 0 ? `${r.toFixed(1)} мм` : '0 мм', score: rScore, max: 10, verdict: rVerdict, pct: rScore/10*100 });
+  score += rScore;
+
+  return { total: score, max: 100, breakdown };
+}
+
+function scoreColor(score) {
+  if (score >= 75) return 'var(--color-success)';
+  if (score >= 50) return 'var(--color-gold)';
+  return 'var(--color-warning)';
+}
+
+function scoreClass(score) {
+  if (score >= 75) return 'c-good';
+  if (score >= 50) return 'c-ok';
+  return 'c-bad';
+}
+
+function scoreBgClass(score) {
+  if (score >= 75) return 'bg-good';
+  if (score >= 50) return 'bg-ok';
+  return 'bg-bad';
+}
+
+function scoreLabel(score) {
+  if (score >= 80) return '🎣 Отличный клёв';
+  if (score >= 65) return '🐟 Хороший клёв';
+  if (score >= 50) return '🌤 Средний клёв';
+  if (score >= 35) return '😐 Слабый клёв';
+  return '🚫 Нет клёва';
+}
+
+// ===== DATA FETCH =====
+async function fetchWeather() {
+  const url = `https://api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LON}`
+    + `&hourly=surface_pressure,temperature_2m,wind_speed_10m,cloud_cover,precipitation`
+    + `&daily=temperature_2m_max,temperature_2m_min,wind_speed_10m_max,cloud_cover_mean,precipitation_sum,surface_pressure_mean`
+    + `&past_days=7&forecast_days=4&timezone=Europe%2FVilnius&wind_speed_unit=ms`;
+  const res = await fetch(url);
+  if (!res.ok) throw new Error('API error ' + res.status);
+  return res.json();
+}
+
+function processData(json) {
+  const { DateTime } = luxon;
+  const daily = json.daily;
+  const hourly = json.hourly;
+
+  // Build pressure by day map
+  const pressureByDay = {};
+  hourly.time.forEach((t, i) => {
+    const day = t.slice(0, 10);
+    if (!pressureByDay[day]) pressureByDay[day] = [];
+    if (hourly.surface_pressure[i] != null)
+      pressureByDay[day].push(hourly.surface_pressure[i]);
+  });
+
+  // Process daily entries
+  const days = daily.time.map((date, i) => {
+    const pressures = pressureByDay[date] || [];
+    const avgP = pressures.length ? pressures.reduce((a,b) => a+b) / pressures.length : daily.surface_pressure_mean[i];
+    return {
+      date,
+      dt: DateTime.fromISO(date, {zone: 'Europe/Vilnius'}),
+      tempMax: daily.temperature_2m_max[i],
+      tempMin: daily.temperature_2m_min[i],
+      windMax: daily.wind_speed_10m_max[i],
+      cloudMean: daily.cloud_cover_mean[i],
+      rain: daily.precipitation_sum[i] ?? 0,
+      pressureMean: avgP,
+      pressures,
+    };
+  });
+
+  // Add delta (vs previous day)
+  days.forEach((d, i) => {
+    d.pressureDelta = i > 0 ? d.pressureMean - days[i-1].pressureMean : 0;
+  });
+
+  const today = DateTime.now().setZone('Europe/Vilnius').startOf('day');
+  const todayIdx = days.findIndex(d => d.dt.hasSame(today, 'day'));
+
+  return { days, todayIdx };
+}
+
+// ===== RENDER =====
+function renderApp(json) {
+  const { DateTime } = luxon;
+  const { days, todayIdx } = processData(json);
+  if (todayIdx === -1) {
+    document.getElementById('app-content').innerHTML = `<div class="error-state"><h3>Нет данных за сегодня</h3><p>Попробуй обновить страницу</p></div>`;
+    return;
+  }
+
+  const today = days[todayIdx];
+  const todayScore = calcFishingScore({
+    pressureDelta24h: today.pressureDelta,
+    airTemp: (today.tempMax + today.tempMin) / 2,
+    cloudCover: today.cloudMean,
+    windSpeed: today.windMax,
+    rain: today.rain,
+  });
+
+  // Pressure chart data: last 7 days + today
+  const chartDays = days.slice(0, todayIdx + 1);
+  const pressureLabels = chartDays.map(d => d.dt.setLocale('ru').toFormat('d MMM'));
+  const pressureValues = chartDays.map(d => d.pressureMean ? +d.pressureMean.toFixed(1) : null);
+
+  // Forecast: next 3 days
+  const forecastDays = days.slice(todayIdx + 1, todayIdx + 4);
+
+  // History table: past 7 days
+  const histDays = days.slice(Math.max(0, todayIdx - 6), todayIdx + 1);
+
+  const circumference = 2 * Math.PI * 44;
+  const dashOffset = circumference * (1 - todayScore.total / 100);
+
+  const ruDays = ['Вс','Пн','Вт','Ср','Чт','Пт','Сб'];
+  const ruMonths = ['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
+
+  const formatDate = (dt) => `${dt.day} ${ruMonths[dt.month-1]}`;
+  const formatDay = (dt) => {
+    const n = dt.setZone('Europe/Vilnius');
+    return ['Воскресенье','Понедельник','Вторник','Среда','Четверг','Пятница','Суббота'][n.weekday % 7];
+  };
+
+  const deltaHTML = (d) => {
+    const sign = d > 0 ? '+' : '';
+    const cls = Math.abs(d) < 3 ? 'c-good' : Math.abs(d) < 6 ? 'c-ok' : 'c-bad';
+    return `<span class="delta-chip ${cls}" style="background:${Math.abs(d)<3?'var(--color-success-highlight)':Math.abs(d)<6?'var(--color-gold-highlight)':'var(--color-warning-highlight)'}">${sign}${d.toFixed(1)} гПа</span>`;
+  };
+
+  const html = `
+    <!-- TODAY HERO -->
+    <div class="today-hero">
+      <div>
+        <div class="today-label">Сегодня</div>
+        <div class="today-title">${scoreLabel(todayScore.total)}</div>
+        <div class="today-date">${formatDay(today.dt)}, ${formatDate(today.dt)} · ${CITY}</div>
+        <div class="today-metrics">
+          <div class="metric">
+            <span class="metric-label">Давление</span>
+            <span class="metric-value">${today.pressureMean ? today.pressureMean.toFixed(0) : '—'} <span style="font-size:var(--text-xs);font-weight:400">гПа</span></span>
+            <span class="metric-sub ${Math.abs(today.pressureDelta)<3?'c-good':'c-bad'}">${today.pressureDelta>0?'+':''}${today.pressureDelta.toFixed(1)} за сутки</span>
+          </div>
+          <div class="metric">
+            <span class="metric-label">Температура</span>
+            <span class="metric-value">${today.tempMax ? today.tempMax.toFixed(0) : '—'}° <span style="font-size:var(--text-xs);font-weight:400">/ ${today.tempMin ? today.tempMin.toFixed(0) : '—'}°</span></span>
+            <span class="metric-sub">возд. °C</span>
+          </div>
+          <div class="metric">
+            <span class="metric-label">Ветер</span>
+            <span class="metric-value">${today.windMax ? today.windMax.toFixed(1) : '—'} <span style="font-size:var(--text-xs);font-weight:400">м/с</span></span>
+            <span class="metric-sub ${today.windMax>=3&&today.windMax<=6?'c-good':today.windMax<=9?'c-ok':'c-bad'}">${today.windMax<=2?'штиль':today.windMax<=6?'лёгкий':today.windMax<=9?'умеренный':'сильный'}</span>
+          </div>
+          <div class="metric">
+            <span class="metric-label">Облачность</span>
+            <span class="metric-value">${today.cloudMean ? today.cloudMean.toFixed(0) : '—'}<span style="font-size:var(--text-xs);font-weight:400">%</span></span>
+            <span class="metric-sub ${today.cloudMean>=60?'c-good':'c-ok'}">${today.cloudMean>=80?'пасмурно':today.cloudMean>=40?'переменно':'ясно'}</span>
+          </div>
+          <div class="metric">
+            <span class="metric-label">Осадки</span>
+            <span class="metric-value">${(today.rain||0).toFixed(1)} <span style="font-size:var(--text-xs);font-weight:400">мм</span></span>
+            <span class="metric-sub">${today.rain>3?'дождь':today.rain>0?'морось':'сухо'}</span>
+          </div>
+        </div>
+      </div>
+      <!-- Score ring -->
+      <div class="score-wrap">
+        <div class="score-ring-container">
+          <svg viewBox="0 0 100 100" width="110" height="110">
+            <circle class="score-ring-bg" cx="50" cy="50" r="44"/>
+            <circle class="score-ring-fill" cx="50" cy="50" r="44"
+              stroke="${scoreColor(todayScore.total)}"
+              stroke-dasharray="${circumference}"
+              stroke-dashoffset="${dashOffset}"
+              id="score-ring-fill"/>
+          </svg>
+          <div class="score-center">
+            <span class="score-number ${scoreClass(todayScore.total)}">${todayScore.total}</span>
+            <span class="score-max">/ 100</span>
+          </div>
+        </div>
+        <span class="score-label ${scoreClass(todayScore.total)}">Рейтинг<br>клёва</span>
+      </div>
+    </div>
+
+    <!-- FACTORS -->
+    <div class="factors-section">
+      <div class="section-title">Факторы сегодня</div>
+      <div class="factors-grid">
+        ${todayScore.breakdown.map(f => `
+          <div class="factor-card">
+            <div class="factor-header">
+              <span class="factor-name">${f.name}</span>
+              <span class="factor-val">${f.value}</span>
+            </div>
+            <div class="factor-bar-bg">
+              <div class="factor-bar-fill" style="width:${f.pct}%;background:${f.pct>=75?'var(--color-success)':f.pct>=40?'var(--color-gold)':'var(--color-warning)'}"></div>
+            </div>
+            <div class="factor-verdict">${f.verdict} · ${f.score}/${f.max} очков</div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+
+    <!-- FORECAST -->
+    <div class="forecast-section">
+      <div class="section-title">Следующие 3 дня</div>
+      <div class="forecast-grid">
+        ${forecastDays.map(d => {
+          const s = calcFishingScore({
+            pressureDelta24h: d.pressureDelta,
+            airTemp: (d.tempMax + d.tempMin) / 2,
+            cloudCover: d.cloudMean,
+            windSpeed: d.windMax,
+            rain: d.rain,
+          });
+          return `
+          <div class="forecast-card">
+            <div class="forecast-day">${formatDay(d.dt).slice(0,3)}, ${formatDate(d.dt)}</div>
+            <div class="forecast-score-badge ${scoreBgClass(s.total)}">${s.total}</div>
+            <div class="forecast-metrics">
+              <div class="forecast-metric-row"><span>Давление</span><b>${d.pressureMean?d.pressureMean.toFixed(0):'—'} гПа</b></div>
+              <div class="forecast-metric-row"><span>Δ давл.</span><b class="${Math.abs(d.pressureDelta)<3?'c-good':'c-bad'}">${d.pressureDelta>0?'+':''}${d.pressureDelta.toFixed(1)}</b></div>
+              <div class="forecast-metric-row"><span>Темп</span><b>${d.tempMax?d.tempMax.toFixed(0):'—'}°/${d.tempMin?d.tempMin.toFixed(0):'—'}°</b></div>
+              <div class="forecast-metric-row"><span>Ветер</span><b>${d.windMax?d.windMax.toFixed(1):'—'} м/с</b></div>
+              <div class="forecast-metric-row"><span>Облака</span><b>${d.cloudMean?d.cloudMean.toFixed(0):'—'}%</b></div>
+              <div class="forecast-metric-row"><span>Осадки</span><b>${(d.rain||0).toFixed(1)} мм</b></div>
+            </div>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>
+
+    <!-- CHART -->
+    <div class="chart-section">
+      <div class="chart-wrap">
+        <div class="chart-header">
+          <span class="chart-title">Давление за 7 дней + прогноз</span>
+          <div class="chart-legend">
+            <div class="legend-item"><div class="legend-dot" style="background:var(--color-primary)"></div> История</div>
+            <div class="legend-item"><div class="legend-dot" style="background:var(--color-gold);opacity:0.7"></div> Норма (1013 гПа)</div>
+          </div>
+        </div>
+        <div class="chart-canvas-wrap"><canvas id="pressureChart"></canvas></div>
+      </div>
+    </div>
+
+    <!-- HISTORY TABLE -->
+    <div class="history-section">
+      <div class="section-title">История последних дней</div>
+      <div style="background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow-sm);">
+        <table class="history-table">
+          <thead><tr>
+            <th>Дата</th><th>Давление</th><th>Δ сутки</th><th>Темп</th><th>Ветер</th><th>Облака</th><th>Клёв</th>
+          </tr></thead>
+          <tbody>
+            ${histDays.map((d, i) => {
+              const s = calcFishingScore({
+                pressureDelta24h: d.pressureDelta,
+                airTemp: (d.tempMax+d.tempMin)/2,
+                cloudCover: d.cloudMean,
+                windSpeed: d.windMax,
+                rain: d.rain,
+              });
+              const isToday = d.dt.hasSame(luxon.DateTime.now().setZone('Europe/Vilnius'), 'day');
+              return `<tr style="${isToday?'background:var(--color-primary-highlight);':''}">
+                <td>${isToday?'<b>Сегодня</b>':formatDate(d.dt)}</td>
+                <td style="font-variant-numeric:tabular-nums">${d.pressureMean?d.pressureMean.toFixed(0):'—'} гПа</td>
+                <td>${i===0&&d.pressureDelta===0?'—':deltaHTML(d.pressureDelta)}</td>
+                <td>${d.tempMax?d.tempMax.toFixed(0):'—'}°</td>
+                <td>${d.windMax?d.windMax.toFixed(1):'—'} м/с</td>
+                <td>${d.cloudMean?d.cloudMean.toFixed(0):'—'}%</td>
+                <td><b class="${scoreClass(s.total)}">${s.total}/100</b></td>
+              </tr>`;
+            }).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- GUIDE -->
+    <div class="guide-section">
+      <div class="section-title">Как читать прогноз</div>
+      <div class="guide-card">
+        <div class="guide-row">
+          <div class="guide-icon">📊</div>
+          <div class="guide-text">
+            <div class="guide-factor">Рейтинг клёва (0–100)</div>
+            <div class="guide-desc">80–100 = отлично · 65–79 = хорошо · 50–64 = средне · ниже 50 = плохо</div>
+          </div>
+        </div>
+        <div class="guide-row">
+          <div class="guide-icon">🌡</div>
+          <div class="guide-text">
+            <div class="guide-factor">Давление (Δ за сутки)</div>
+            <div class="guide-desc">Главное — не само значение, а изменение. Зелёный = стабильно (хорошо), жёлтый = небольшой скачок, красный = резкий перепад (рыба пассивна)</div>
+            <div class="guide-ideal">✓ Идеально: Δ &lt; 3 гПа/сутки 2+ дня подряд</div>
+          </div>
+        </div>
+        <div class="guide-row">
+          <div class="guide-icon">🌬</div>
+          <div class="guide-text">
+            <div class="guide-factor">Ветер</div>
+            <div class="guide-desc">3–6 м/с перемешивает воду и поднимает корм со дна — лучшее для клёва. Штиль и >9 м/с — хуже.</div>
+          </div>
+        </div>
+        <div class="guide-row">
+          <div class="guide-icon">☁️</div>
+          <div class="guide-text">
+            <div class="guide-factor">Облачность</div>
+            <div class="guide-desc">Пасмурное небо (60–100%) — рыба не прячется от света и активно кормится у поверхности.</div>
+          </div>
+        </div>
+        <div class="guide-row">
+          <div class="guide-icon">🔄</div>
+          <div class="guide-text">
+            <div class="guide-factor">Источник данных</div>
+            <div class="guide-desc">Open-Meteo API · Бесплатный, без ключа · Обновление каждые 3 часа · Координаты: 54.98°N, 25.77°E</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+      <p>Данные: <a href="https://open-meteo.com" target="_blank" rel="noopener">Open-Meteo.com</a> · Научная база: VanderWeyst (2014), PMC/Nature (2021) · Обновлено: ${luxon.DateTime.now().setZone('Europe/Vilnius').setLocale('ru').toFormat("d MMM HH:mm")}</p>
+    </footer>
+  `;
+
+  document.getElementById('app-content').innerHTML = html;
+
+  // Draw chart
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  const gridColor = isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)';
+  const textColor = isDark ? '#797876' : '#7a7974';
+
+  // All chart days (history + forecast)
+  const allChartDays = days.slice(0, todayIdx + 4);
+  const allLabels = allChartDays.map(d => d.dt.setLocale('ru').toFormat('d MMM'));
+  const allPressure = allChartDays.map(d => d.pressureMean ? +d.pressureMean.toFixed(1) : null);
+  const normLine = allChartDays.map(() => 1013);
+  const histCount = todayIdx + 1;
+
+  new Chart(document.getElementById('pressureChart'), {
+    type: 'line',
+    data: {
+      labels: allLabels,
+      datasets: [
+        {
+          label: 'Давление (гПа)',
+          data: allPressure,
+          borderColor: (ctx) => {
+            const i = ctx.dataIndex;
+            return i < histCount ? 'var(--color-primary)' : 'var(--color-gold)';
+          },
+          segment: {
+            borderColor: ctx => ctx.p0DataIndex >= histCount - 1 ? 'rgba(232,175,52,0.7)' : undefined,
+            borderDash: ctx => ctx.p0DataIndex >= histCount - 1 ? [5,3] : undefined,
+          },
+          pointBackgroundColor: allPressure.map((_, i) => i < histCount ? 'var(--color-primary)' : 'rgba(232,175,52,0.7)'),
+          pointRadius: 4,
+          pointHoverRadius: 6,
+          tension: 0.3,
+          fill: {
+            target: 'origin',
+            above: isDark ? 'rgba(79,152,163,0.05)' : 'rgba(1,105,111,0.05)',
+          },
+          borderWidth: 2,
+        },
+        {
+          label: 'Норма 1013 гПа',
+          data: normLine,
+          borderColor: isDark ? 'rgba(232,175,52,0.25)' : 'rgba(209,153,0,0.3)',
+          borderDash: [4,4],
+          pointRadius: 0,
+          borderWidth: 1,
+          tension: 0,
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: isDark ? '#1c1b19' : '#f9f8f5',
+          borderColor: isDark ? '#393836' : '#d4d1ca',
+          borderWidth: 1,
+          titleColor: isDark ? '#cdccca' : '#28251d',
+          bodyColor: isDark ? '#797876' : '#7a7974',
+          padding: 10,
+          callbacks: {
+            label: ctx => ` ${ctx.parsed.y} гПа`,
+          }
+        }
+      },
+      scales: {
+        x: {
+          grid: { color: gridColor },
+          ticks: { color: textColor, font: { size: 11 } },
+        },
+        y: {
+          grid: { color: gridColor },
+          ticks: { color: textColor, font: { size: 11 }, callback: v => v + ' гПа' },
+          suggestedMin: 990, suggestedMax: 1030,
+        }
+      },
+      animation: { duration: 800, easing: 'easeOutQuart' },
+    }
+  });
+}
+
+// ===== INIT =====
+fetchWeather()
+  .then(json => renderApp(json))
+  .catch(err => {
+    document.getElementById('app-content').innerHTML = `
+      <div class="error-state">
+        <h3>Ошибка загрузки данных</h3>
+        <p>${err.message}</p>
+        <p style="margin-top:var(--space-2);font-size:var(--text-xs)">Проверь подключение к интернету и обнови страницу</p>
+      </div>`;
+  });
+</script>
+</body>
+</html>
