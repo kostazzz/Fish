@@ -343,6 +343,8 @@ const SPECIES = {
   'bream': { name: 'Лещ', icon: '🐡', weights: { pressure: 0.30, temp: 0.25, wind: 0.15, cloud: 0.10, rain: 0.05, solunar: 0.15 } },
 };
 
+let currentSpecies = 'pike';
+
 // ===== THEME TOGGLE =====
 (function(){
   const t = document.querySelector('[data-theme-toggle]');
@@ -358,15 +360,11 @@ const SPECIES = {
 
 // ===== SOLUNAR CALCULATION (Simplified) =====
 function getSolunarScore(dateTime) {
-  // Simplified solunar: major periods are around moon transit and moonrise/moonset.
-  // We'll approximate using the hour of the day and lunar phase.
   const hour = dateTime.hour + dateTime.minute / 60;
-  // Major periods: roughly 6 hours apart (moon transit and opposite).
-  // Minor periods: roughly 6 hours apart, offset by 3 hours from major.
-  const major1 = (hour - 0) % 24; // 00:00
-  const major2 = (hour - 12) % 24; // 12:00
-  const minor1 = (hour - 3) % 24;  // 03:00
-  const minor2 = (hour - 15) % 24; // 15:00
+  const major1 = (hour - 0) % 24;
+  const major2 = (hour - 12) % 24;
+  const minor1 = (hour - 3) % 24;
+  const minor2 = (hour - 15) % 24;
 
   function distanceToPeriod(h, period) {
     const d1 = Math.abs(h - period);
@@ -378,7 +376,6 @@ function getSolunarScore(dateTime) {
   const distMajor = Math.min(distanceToPeriod(hour, major1), distanceToPeriod(hour, major2));
   const distMinor = Math.min(distanceToPeriod(hour, minor1), distanceToPeriod(hour, minor2));
 
-  // Score 0-100: peak at 0 distance, decreasing to 0 at 3 hours away.
   let score = 0;
   if (distMajor < 1.5) score = 100 * (1 - distMajor / 1.5);
   else if (distMinor < 1.5) score = 60 * (1 - distMinor / 1.5);
@@ -386,8 +383,9 @@ function getSolunarScore(dateTime) {
   return Math.round(score);
 }
 
-// ===== FISHING SCORE ENGINE (Enhanced) =====
-function calcFishingScore(data, speciesKey = 'pike') {
+// ===== FISHING SCORE ENGINE =====
+function calcFishingScore(data, speciesKey) {
+  speciesKey = speciesKey || currentSpecies;
   const sp = SPECIES[speciesKey] || SPECIES['pike'];
   const w = sp.weights;
   let score = 0;
@@ -400,7 +398,7 @@ function calcFishingScore(data, speciesKey = 'pike') {
   else if (delta < 3) { pScore = 20; pVerdict = 'Слабый сдвиг — хорошо'; }
   else if (delta < 6) { pScore = 10; pVerdict = 'Заметный скачок — средне'; }
   else { pScore = 0; pVerdict = 'Резкий скачок — плохо'; }
-  breakdown.push({ name: 'Давление (Δ)', value: `${delta > 0 ? (data.pressureDelta24h > 0 ? '+' : '') : '±'}${data.pressureDelta24h.toFixed(1)} гПа`, score: pScore, max: 25, verdict: pVerdict, pct: delta < 1 ? 100 : delta < 3 ? 80 : delta < 6 ? 40 : 5 });
+  breakdown.push({ name: 'Давление (Δ)', value: `${data.pressureDelta24h > 0 ? '+' : ''}${data.pressureDelta24h.toFixed(1)} гПа`, score: pScore, max: 25, verdict: pVerdict, pct: delta < 1 ? 100 : delta < 3 ? 80 : delta < 6 ? 40 : 5 });
   score += pScore * w.pressure;
 
   // 2. Water temp (air temp proxy, max 25pts)
@@ -445,12 +443,11 @@ function calcFishingScore(data, speciesKey = 'pike') {
 
   // 6. Solunar (max 15pts)
   const solunarScore = data.solunarScore || 50;
-  const solunarPct = solunarScore;
   let sVerdict;
   if (solunarScore >= 80) sVerdict = 'Активный период — отлично';
   else if (solunarScore >= 50) sVerdict = 'Средняя активность';
   else sVerdict = 'Спад активности';
-  breakdown.push({ name: 'Лунный период', value: `${solunarScore}/100`, score: Math.round(solunarScore/100*15), max: 15, verdict: sVerdict, pct: solunarPct });
+  breakdown.push({ name: 'Лунный период', value: `${solunarScore}/100`, score: Math.round(solunarScore/100*15), max: 15, verdict: sVerdict, pct: solunarScore });
   score += (solunarScore/100*15) * w.solunar;
 
   return { total: Math.round(score), max: 100, breakdown };
@@ -498,13 +495,11 @@ function processData(json) {
   const daily = json.daily;
   const hourly = json.hourly;
 
-  // Build hourly pressure map for delta calculation at same time
   const pressureByHour = {};
   hourly.time.forEach((t, i) => {
     pressureByHour[t] = hourly.surface_pressure[i];
   });
 
-  // Build daily pressure averages
   const pressureByDay = {};
   hourly.time.forEach((t, i) => {
     const day = t.slice(0, 10);
@@ -513,7 +508,6 @@ function processData(json) {
       pressureByDay[day].push(hourly.surface_pressure[i]);
   });
 
-  // Process daily entries
   const days = daily.time.map((date, i) => {
     const pressures = pressureByDay[date] || [];
     const avgP = pressures.length ? pressures.reduce((a,b) => a+b) / pressures.length : daily.surface_pressure_mean[i];
@@ -531,12 +525,10 @@ function processData(json) {
     };
   });
 
-  // Calculate pressure delta at same time (e.g., 12:00) for each day
   days.forEach((d, i) => {
     if (i === 0) { d.pressureDelta = 0; return; }
     const prevDate = days[i-1].date;
     const currDate = d.date;
-    // Find pressure at 12:00 for both days
     const prevKey = `${prevDate}T12:00`;
     const currKey = `${currDate}T12:00`;
     const prevP = pressureByHour[prevKey];
@@ -544,7 +536,6 @@ function processData(json) {
     if (prevP != null && currP != null) {
       d.pressureDelta = currP - prevP;
     } else {
-      // Fallback to mean difference
       d.pressureDelta = d.pressureMean - days[i-1].pressureMean;
     }
   });
@@ -564,6 +555,26 @@ function renderApp(json) {
     return;
   }
 
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+
+  // Chart color palette (hex/rgba — Chart.js does not understand CSS variables)
+  const CHART = {
+    histLine:    isDark ? '#7fa8b0' : '#01696f',
+    histPoint:   isDark ? '#7fa8b0' : '#01696f',
+    forecastLine: isDark ? 'rgba(232,175,52,0.85)' : 'rgba(209,153,0,0.85)',
+    forecastPoint: isDark ? 'rgba(232,175,52,0.85)' : 'rgba(209,153,0,0.85)',
+    histFill:    isDark ? 'rgba(127,168,176,0.08)' : 'rgba(1,105,111,0.05)',
+    normLine:    isDark ? 'rgba(232,175,52,0.25)' : 'rgba(209,153,0,0.30)',
+    grid:        isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)',
+    text:        isDark ? '#797876' : '#7a7974',
+    tooltipBg:   isDark ? '#1c1b19' : '#f9f8f5',
+    tooltipBd:   isDark ? '#393836' : '#d4d1ca',
+    tooltipTitle: isDark ? '#cdccca' : '#28251d',
+    tooltipBody:  isDark ? '#797876' : '#7a7974',
+    hourlyLine:  isDark ? '#7fa8b0' : '#01696f',
+    hourlyFill:  isDark ? 'rgba(127,168,176,0.15)' : 'rgba(1,105,111,0.1)',
+  };
+
   const today = days[todayIdx];
   const todaySolunar = getSolunarScore(DateTime.now().setZone('Europe/Vilnius'));
   const todayScore = calcFishingScore({
@@ -575,15 +586,7 @@ function renderApp(json) {
     solunarScore: todaySolunar,
   });
 
-  // Pressure chart data: last 7 days + today
-  const chartDays = days.slice(0, todayIdx + 1);
-  const pressureLabels = chartDays.map(d => d.dt.setLocale('ru').toFormat('d MMM'));
-  const pressureValues = chartDays.map(d => d.pressureMean ? +d.pressureMean.toFixed(1) : null);
-
-  // Forecast: next 3 days
   const forecastDays = days.slice(todayIdx + 1, todayIdx + 4);
-
-  // History table: past 7 days
   const histDays = days.slice(Math.max(0, todayIdx - 6), todayIdx + 1);
 
   const circumference = 2 * Math.PI * 44;
@@ -608,7 +611,7 @@ function renderApp(json) {
     <!-- SPECIES SELECTOR -->
     <div class="species-selector">
       ${Object.entries(SPECIES).map(([key, s]) => `
-        <button class="species-btn ${key === 'pike' ? 'active' : ''}" data-species="${key}">${s.icon} ${s.name}</button>
+        <button class="species-btn ${key === currentSpecies ? 'active' : ''}" data-species="${key}">${s.icon} ${s.name}</button>
       `).join('')}
     </div>
 
@@ -651,7 +654,6 @@ function renderApp(json) {
           </div>
         </div>
       </div>
-      <!-- Score ring -->
       <div class="score-wrap">
         <div class="score-ring-container">
           <svg viewBox="0 0 100 100" width="110" height="110">
@@ -735,8 +737,9 @@ function renderApp(json) {
         <div class="chart-header">
           <span class="chart-title">Давление за 7 дней + прогноз</span>
           <div class="chart-legend">
-            <div class="legend-item"><div class="legend-dot" style="background:var(--color-primary)"></div> История</div>
-            <div class="legend-item"><div class="legend-dot" style="background:var(--color-gold);opacity:0.7"></div> Норма (1013 гПа)</div>
+            <div class="legend-item"><div class="legend-dot" style="background:${CHART.histLine}"></div> История</div>
+            <div class="legend-item"><div class="legend-dot" style="background:${CHART.forecastLine}"></div> Прогноз</div>
+            <div class="legend-item"><div class="legend-dot" style="background:${CHART.normLine}"></div> Норма (1013 гПа)</div>
           </div>
         </div>
         <div class="chart-canvas-wrap"><canvas id="pressureChart"></canvas></div>
@@ -808,7 +811,7 @@ function renderApp(json) {
           <div class="guide-icon">🌬</div>
           <div class="guide-text">
             <div class="guide-factor">Ветер</div>
-            <div class="guide-desc">3–6 м/с перемешивает воду и поднимает корм со дна — лучшее для клёва. Штиль и >9 м/с — хуже.</div>
+            <div class="guide-desc">3–6 м/с перемешивает воду и поднимает корм со дна — лучшее для клёва. Штиль и &gt;9 м/с — хуже.</div>
           </div>
         </div>
         <div class="guide-row">
@@ -836,11 +839,7 @@ function renderApp(json) {
 
   document.getElementById('app-content').innerHTML = html;
 
-  // Draw pressure chart
-  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-  const gridColor = isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)';
-  const textColor = isDark ? '#797876' : '#7a7974';
-
+  // ===== PRESSURE CHART =====
   const allChartDays = days.slice(0, todayIdx + 4);
   const allLabels = allChartDays.map(d => d.dt.setLocale('ru').toFormat('d MMM'));
   const allPressure = allChartDays.map(d => d.pressureMean ? +d.pressureMean.toFixed(1) : null);
@@ -855,28 +854,25 @@ function renderApp(json) {
         {
           label: 'Давление (гПа)',
           data: allPressure,
-          borderColor: (ctx) => {
-            const i = ctx.dataIndex;
-            return i < histCount ? 'var(--color-primary)' : 'var(--color-gold)';
-          },
+          borderColor: CHART.histLine,
           segment: {
-            borderColor: ctx => ctx.p0DataIndex >= histCount - 1 ? 'rgba(232,175,52,0.7)' : undefined,
+            borderColor: ctx => ctx.p0DataIndex >= histCount - 1 ? CHART.forecastLine : undefined,
             borderDash: ctx => ctx.p0DataIndex >= histCount - 1 ? [5,3] : undefined,
           },
-          pointBackgroundColor: allPressure.map((_, i) => i < histCount ? 'var(--color-primary)' : 'rgba(232,175,52,0.7)'),
+          pointBackgroundColor: allPressure.map((_, i) => i < histCount ? CHART.histPoint : CHART.forecastPoint),
           pointRadius: 4,
           pointHoverRadius: 6,
           tension: 0.3,
           fill: {
             target: 'origin',
-            above: isDark ? 'rgba(79,152,163,0.05)' : 'rgba(1,105,111,0.05)',
+            above: CHART.histFill,
           },
           borderWidth: 2,
         },
         {
           label: 'Норма 1013 гПа',
           data: normLine,
-          borderColor: isDark ? 'rgba(232,175,52,0.25)' : 'rgba(209,153,0,0.3)',
+          borderColor: CHART.normLine,
           borderDash: [4,4],
           pointRadius: 0,
           borderWidth: 1,
@@ -890,11 +886,11 @@ function renderApp(json) {
       plugins: {
         legend: { display: false },
         tooltip: {
-          backgroundColor: isDark ? '#1c1b19' : '#f9f8f5',
-          borderColor: isDark ? '#393836' : '#d4d1ca',
+          backgroundColor: CHART.tooltipBg,
+          borderColor: CHART.tooltipBd,
           borderWidth: 1,
-          titleColor: isDark ? '#cdccca' : '#28251d',
-          bodyColor: isDark ? '#797876' : '#7a7974',
+          titleColor: CHART.tooltipTitle,
+          bodyColor: CHART.tooltipBody,
           padding: 10,
           callbacks: {
             label: ctx => ` ${ctx.parsed.y} гПа`,
@@ -903,12 +899,12 @@ function renderApp(json) {
       },
       scales: {
         x: {
-          grid: { color: gridColor },
-          ticks: { color: textColor, font: { size: 11 } },
+          grid: { color: CHART.grid },
+          ticks: { color: CHART.text, font: { size: 11 } },
         },
         y: {
-          grid: { color: gridColor },
-          ticks: { color: textColor, font: { size: 11 }, callback: v => v + ' гПа' },
+          grid: { color: CHART.grid },
+          ticks: { color: CHART.text, font: { size: 11 }, callback: v => v + ' гПа' },
           suggestedMin: 990, suggestedMax: 1030,
         }
       },
@@ -916,17 +912,17 @@ function renderApp(json) {
     }
   });
 
-  // Draw hourly bite chart
+  // ===== HOURLY BITE CHART =====
   const todayStr = today.date;
   const todayHourly = [];
   for (let h = 0; h < 24; h++) {
     const key = `${todayStr}T${String(h).padStart(2,'0')}:00`;
+    const idx = hourly.time.indexOf(key);
     const p = pressureByHour[key] ?? today.pressureMean;
-    const temp = hourly.temperature_2m[hourly.time.indexOf(key)] ?? (today.tempMax + today.tempMin) / 2;
-    const cloud = hourly.cloud_cover[hourly.time.indexOf(key)] ?? today.cloudMean;
-    const rain = hourly.precipitation[hourly.time.indexOf(key)] ?? 0;
+    const temp = idx >= 0 ? hourly.temperature_2m[idx] : (today.tempMax + today.tempMin) / 2;
+    const cloud = idx >= 0 ? hourly.cloud_cover[idx] : today.cloudMean;
+    const rain = idx >= 0 ? hourly.precipitation[idx] : 0;
     const solunar = getSolunarScore(DateTime.fromISO(key, {zone: 'Europe/Vilnius'}));
-    // Simple hourly score: use daily factors + solunar
     const hScore = calcFishingScore({
       pressureDelta24h: today.pressureDelta,
       airTemp: temp,
@@ -945,8 +941,8 @@ function renderApp(json) {
       datasets: [{
         label: 'Клёв по часам',
         data: todayHourly.map(h => h.score),
-        borderColor: 'var(--color-primary)',
-        backgroundColor: 'rgba(1,105,111,0.1)',
+        borderColor: CHART.hourlyLine,
+        backgroundColor: CHART.hourlyFill,
         fill: true,
         tension: 0.4,
         pointRadius: 0,
@@ -958,28 +954,25 @@ function renderApp(json) {
       maintainAspectRatio: false,
       plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ` ${ctx.parsed.y}/100` } } },
       scales: {
-        x: { grid: { display: false }, ticks: { color: textColor, font: { size: 10 }, maxTicksLimit: 12 } },
+        x: { grid: { display: false }, ticks: { color: CHART.text, font: { size: 10 }, maxTicksLimit: 12 } },
         y: { display: false, min: 0, max: 100 },
       },
       animation: { duration: 600 },
     }
   });
+
+  // Species selector
+  document.querySelectorAll('.species-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      currentSpecies = btn.dataset.species;
+      renderApp(json);
+    });
+  });
 }
 
 // ===== INIT =====
 fetchWeather()
-  .then(json => {
-    renderApp(json);
-    // Species selector event listeners
-    document.querySelectorAll('.species-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('.species-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        // Re-render with new species (simplified: just re-fetch and render)
-        fetchWeather().then(json => renderApp(json));
-      });
-    });
-  })
+  .then(json => renderApp(json))
   .catch(err => {
     document.getElementById('app-content').innerHTML = `
       <div class="error-state">
