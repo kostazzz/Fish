@@ -650,7 +650,7 @@ function dayDetailHTML(p, di) {
   var dayMins = Math.round((dayLen - dayHrs) * 60);
   var dayLenStr = dayHrs + 'ч ' + dayMins + 'м';
   var html = '';
-  html += '<div class="day-hd"><div class="day-hd-ico">' + dayWeatherIcon(d.wCode) + '</div><div class="day-hd-txt"><div class="day-hd-title">' + RU_DOW[dd.getDay()] + ' ' + dd.getDate() + ' ' + RU_MON[dd.getMonth()] + '</div><div class="day-hd-sub">' + weatherDesc(d.wCode) + '</div></div></div>';
+  html += '<div class="day-hd"><div class="day-hd-ico">' + dayWeatherIcon(d.wCode) + '</div><div class="day-hd-txt"><div class="day-hd-title">' + weatherDesc(d.wCode) + '</div></div></div>';
   html += '<h3>Клёв</h3>';
   html += '<div class="row"><span class="k">Средний балл</span><span class="v">' + avgScore + '/100</span></div>';
   html += '<div class="row"><span class="k">Лучшая рыба</span><span class="v">' + SPECIES[bestFish].name + ' · ' + fishScores[bestFish] + '</span></div>';
