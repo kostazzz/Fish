@@ -2,1124 +2,554 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#faf9f5">
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23000000'/%3E%3Cpath d='M12.19 20.204 L12.11 7.001 L14.974 7.001 L14.974 11.211 C14.974 11.462 15.174 11.665 15.42 11.665 L15.682 11.665 C15.822 11.665 15.955 11.597 16.039 11.482 C16.039 11.482 18.487 9.24 19.318 7.001 L22.604 7.001 C21.214 10.335 18.487 12.452 18.487 12.452 C18.306 12.691 18.305 13.025 18.484 13.266 C18.484 13.266 19.911 15.745 22.253 17.706 C23.64 15.584 24.472 12.557 24.156 8.264 L24.156 8.264 C24.214 7.55 24.8 7.001 25.502 7.001 L26.762 7.001 C26.866 8.635 26.875 10.489 26.823 11.198 C25.759 25.695 12.736 25.322 10.398 24.833 C6.425 24.002 5.271 21.595 5.271 19.636 C5.271 16.722 7.765 14.814 10.761 15.441 L10.761 17.6 C7.297 17.289 7.167 22.074 11.891 22.413 C13.831 22.551 17.51 22.217 20.347 19.85 C17.419 16.716 17.881 16.867 16.055 14.346 C15.971 14.231 15.838 14.164 15.698 14.164 L15.42 14.164 C15.174 14.164 14.974 14.367 14.974 14.618 L14.974 20.179 Z' fill='white'/%3E%3C/svg%3E">
-<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' rx='36' fill='%23000000'/%3E%3Cpath d='M68.57 113.65 L68.12 39.38 L84.23 39.38 L84.23 63.06 C84.23 64.47 85.35 65.62 86.74 65.62 L88.21 65.62 C89.0 65.62 89.75 65.23 90.22 64.59 C90.22 64.59 103.99 51.98 108.66 39.38 L127.15 39.38 C119.33 58.14 104.0 70.05 104.0 70.05 C102.97 71.39 102.96 73.27 103.97 74.62 C103.97 74.62 112.0 88.56 125.17 99.6 C132.97 87.66 137.65 70.63 135.87 46.49 L135.87 46.49 C136.2 42.47 139.5 39.38 143.45 39.38 L150.53 39.38 C151.12 48.57 151.17 59.0 150.88 62.99 C144.9 144.53 71.64 142.44 58.49 139.69 C36.14 135.01 29.65 121.47 29.65 110.45 C29.65 94.06 43.68 83.33 60.53 86.86 L60.53 98.99 C41.05 97.25 40.32 124.16 66.89 126.07 C77.8 126.85 98.49 124.97 114.45 111.65 C98.0 94.03 100.59 94.88 90.31 80.7 C89.84 80.05 89.09 79.67 88.3 79.67 L86.74 79.67 C85.35 79.67 84.23 80.81 84.23 82.22 L84.23 113.51 Z' fill='white'/%3E%3C/svg%3E">
-<title>Клёв — Пабраде</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#f9f9f9" media="(prefers-color-scheme: light)">
+<title>Клёв</title>
 <style>
-.ft-cmp { display: inline-flex; align-items: flex-start; font-weight: 700; font-size: 16px; line-height: 1; color: var(--ink); }
 :root {
-  --bg: #faf9f5; --ink: #0a0a0a; --ink-2: #6a6a6a; --ink-3: #9a9a9a;
-  --green-mid: #007E45; --gray-mid: #b3b3b3; --line: #ecebe6; --green: #009245;
-  --danger: #c1341e;
-  --f: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', 'Segoe UI', Arial, sans-serif;
+  color-scheme: dark light;
+  --bg: #000000;
+  --surface: #111111;
+  --line: #222222;
+  --fg: #ffffff;
+  --fg-dim: #777777;
+  --bar-low: #222222;
+  --bar-mid: #1e4a28;
+  --bar-high: #27a844;
+  --bad: #b36b6b;
+  --input-bg: #0a0a0a;
+  --overlay: rgba(0,0,0,0.85);
+  --btn-on-text: #000000;
+  --font: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
-[data-theme="dark"] {
-  --bg: #0d0d0d; --ink: #ececec; --ink-2: #a0a0a0; --ink-3: #666;
-  --gray-mid: #6a6a6a; --line: #1e1e1e; --green: #4ade80;
-  --danger: #e07a62;
+@media (prefers-color-scheme: light) {
+  :root {
+    --bg: #f9f9f9;
+    --surface: #ffffff;
+    --line: #e0e0e0;
+    --fg: #111111;
+    --fg-dim: #666666;
+    --bar-low: #e0e0e0;
+    --bar-mid: #a0d8a0;
+    --bar-high: #2e7d32;
+    --bad: #d32f2f;
+    --input-bg: #f0f0f0;
+    --overlay: rgba(0,0,0,0.5);
+    --btn-on-text: #ffffff;
+  }
 }
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { -webkit-font-smoothing: antialiased; -webkit-tap-highlight-color: transparent; }
-body { font-family: var(--f); font-size: 15px; color: var(--ink); background: var(--bg);
-  line-height: 1.4; max-width: 440px; margin: 0 auto; padding: 0 20px 20px; min-height: 100dvh; overflow-x: hidden; }
-button { cursor: pointer; background: none; border: none; font: inherit; color: inherit; padding: 0; }
-a { color: inherit; text-decoration: none; }
-
-.hd { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 8px; padding: 18px 12px 16px; min-height: 60px; position: relative; }
-.hd::after { content: ''; position: absolute; left: 12px; right: 12px; bottom: 0; height: 1px; background: var(--line); }
-.hd-l { display: flex; align-items: center; justify-self: start; height: 22px; color: var(--ink); }
-.hd-l svg { height: 22px; width: auto; display: block; }
-.hd-r { display: flex; align-items: center; justify-content: flex-end; gap: 6px; height: 22px;
-  font-size: 15px; font-weight: 500; white-space: nowrap; line-height: 22px; justify-self: end; }
-.hd-r svg { width: 18px; height: 10px; display: block; flex-shrink: 0; }
-
-.fish-wrap { position: relative; }
-.fish-scroll { display: grid; grid-auto-flow: column; grid-auto-columns: 33.333%;
-  overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory;
-  -webkit-overflow-scrolling: touch; scrollbar-width: none;
-  margin-left: -20px; padding-right: 20px; }
-.fish-scroll::-webkit-scrollbar { display: none; }
-.fr-c { scroll-snap-align: start; text-align: center; padding: 24px 8px 24px; cursor: pointer; position: relative; min-height: 190px; }
-.fr-c + .fr-c::before { content: ''; position: absolute; left: 0; top: 28px; bottom: 28px; width: 1px; background: var(--line); }
-.fr-s { display: block; font-size: 48px; font-weight: 700; letter-spacing: -0.05em; line-height: 0.9;
-  color: var(--gray-mid); font-variant-numeric: tabular-nums; margin-bottom: 18px; }
-.fr-c.great .fr-s { color: var(--green); }
-.fr-c.low { opacity: 0.5; }
-.fr-c.mid { opacity: 0.7; }
-.fr-n { display: block; font-size: 22px; font-weight: 700; letter-spacing: -0.01em; color: var(--ink); margin-bottom: 11px; }
-.fr-t { display: block; font-size: 16px; line-height: 1.4; white-space: nowrap; }
-.fr-min { color: var(--ink-3); font-weight: 500; }
-.fr-c.great .fr-min { opacity: 0.6; }
-.fr-t.main { font-weight: 700; color: var(--ink); margin-bottom: 2px; }
-.fr-c.great .fr-t.main { color: var(--green); }
-.fr-t.sub { font-weight: 500; color: var(--ink-2); }
-.fr-ban { display: block; font-size: 14px; font-weight: 600; color: #D75055; line-height: 1.2; margin-top: 4px; }
-
-.press { padding: 20px 12px 0; }
-.press-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; padding-bottom: 8px;
-  border-bottom: 1px dashed var(--line); font-size: 15px; font-weight: 700; color: var(--ink); font-variant-numeric: tabular-nums; gap: 6px; }
-.press-header-gpa { font-weight: 700; color: var(--ink); font-size: 15px; flex-shrink: 0; }
-.press-header-cat { font-weight: 700; color: var(--ink); font-size: 15px; flex: 1; text-align: center; }
-.press-header-cat .lbl { font-weight: 500; color: var(--ink-3); margin-right: 3px; }
-.press-header-time { font-weight: 700; color: var(--ink); white-space: nowrap; flex-shrink: 0; font-size: 15px; }
-.press-header-time .lbl { font-weight: 500; color: var(--ink-3); margin-right: 3px; }
-.press-vals { display: grid; grid-template-columns: auto auto auto auto auto; justify-content: space-between; font-variant-numeric: tabular-nums; font-size: 15px; margin-bottom: 8px; }
-.press-vals > span { font-weight: 500; color: var(--ink); }
-.press-vals > span.past { color: var(--ink-3); font-weight: 500; }
-.press-vals > span.current { color: var(--ink); font-weight: 700; }
-.press-vals > span.future { color: var(--ink); font-weight: 500; }
-.pbar { height: 3px; background: rgba(0,0,0,.1); border-radius: 0; position: relative; margin-bottom: 9px; }
-[data-theme="dark"] .pbar { background: rgba(255,255,255,.15); }
-.pbar-fill { position: absolute; top: 0; left: 0; height: 100%; background: var(--green); border-radius: 0; transition: width .4s ease; }
-.pbar-times { display: grid; grid-template-columns: auto auto auto auto auto; justify-content: space-between; font-size: 13px; margin-bottom: 4px; font-variant-numeric: tabular-nums; }
-.pbar-times > span { font-weight: 500; color: var(--ink); }
-.pbar-times > span.past { color: var(--ink-3); font-weight: 500; }
-.pbar-times > span.current { color: var(--ink); font-weight: 700; }
-
-.chart-svg { width: 100%; height: auto; display: block; }
-.chart-wrap { margin-top: 8px; margin-bottom: 0; margin-left: -12px; margin-right: -12px; }
-.chart-days { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0; padding: 2px 0 20px; margin: 0 -5px; position: relative; }
-.cd { text-align: center; padding: 6px 2px; display: flex; flex-direction: column; align-items: center; gap: 6px; cursor: pointer; }
-.cd.past { opacity: 0.6; }
-.cd.past .cd-date, .cd.past .cd-wx, .cd.past .cd-score { color: var(--gray-mid); }
-.cd.future { opacity: 0.55; }
-.cd.future.great .cd-score { color: var(--green); }
-.cd.today { opacity: 1; }
-.cd.today .cd-date { color: var(--green-mid); font-weight: 700; }
-.cd.today .cd-wx { opacity: 0.5; }
-.cd.today .cd-score { color: var(--ink); font-weight: 700; font-size: 21px; }
-.cd-date { font-size: 14px; font-weight: 500; color: var(--ink); white-space: nowrap; }
-.cd-score { font-size: 21px; font-weight: 700; line-height: 1; font-variant-numeric: tabular-nums; color: var(--ink); }
-.cd-wx { display: flex; align-items: center; gap: 3px; font-size: 12px; font-weight: 500; color: var(--ink); }
-.cd-wx svg { width: 12px; height: 12px; }
-.day-hd { display: flex; align-items: center; gap: 14px; margin: -8px 0 18px; }
-.day-hd-ico { width: 44px; height: 44px; color: var(--ink-2); flex-shrink: 0; }
-.day-hd-ico svg { width: 100%; height: 100%; display: block; }
-.day-hd-txt { flex: 1; }
-.day-hd-title { font-size: 20px; font-weight: 800; letter-spacing: -0.02em; }
-.day-hd-sub { font-size: 13px; color: var(--ink-3); margin-top: 2px; }
-
-.met { display: grid; grid-template-columns: 0.85fr 1fr 1fr 1.15fr; gap: 0; padding: 18px 8px;
-  background: rgba(0,0,0,.03); border-radius: 14px; margin: 12px 0 12px 0; }
-[data-theme="dark"] .met { background: rgba(255,255,255,.04); }
-.met-c { text-align: center; padding: 0 4px; position: relative; display: flex; flex-direction: column; align-items: center; }
-.met-c + .met-c::before { content: ''; position: absolute; left: 0; top: 6px; bottom: 6px; width: 1px; background: var(--line); }
-.met-ico { height: 32px; display: flex; align-items: center; justify-content: center; margin-bottom: 12px; color: var(--gray-mid); }
-.met-ico svg { display: block; color: var(--gray-mid); }
-.met-ico svg * { fill: currentColor; }
-.met-v { font-size: 17px; font-weight: 700; line-height: 1.1; font-variant-numeric: tabular-nums; white-space: nowrap; }
-.met-v .unit { font-weight: 500; }
-.met-v .min { font-weight: 500; color: var(--ink-2); }
-.met-v .min .unit { font-weight: 500; }
-.met-l { font-size: 13px; color: var(--ink-3); font-weight: 500; margin-top: 6px; }
-.met-l .dir { font-weight: 500; }
-.wind-dir-arrow { display: inline-block; width: 13px; height: 13px; margin-right: 3px; vertical-align: -2px; color: var(--ink); }
-.wind-dir-arrow svg { width: 100%; height: 100%; display: block; }
-
-.info { padding: 16px 44px 16px 20px; background: rgba(0,0,0,.03); border-radius: 14px; margin: 12px 0;
-  font-size: 14px; line-height: 1.3; color: var(--green-mid); position: relative; cursor: pointer; user-select: none; }
-[data-theme="dark"] .info { background: rgba(255,255,255,.04); color: rgba(255,255,255,0.6); }
-.info .info-bold { color: var(--green-mid); }
-.info div { margin-bottom: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.info div:last-child { margin-bottom: 0; }
-.info.collapsed > div:not(.info-bold):not(.info-keep) { display: none; }
-.info.collapsed { padding: 16px 44px 12px 20px; }
-.info-toggle { position: absolute; top: 21px; right: 24px; width: 15px; height: 8px;
-  color: var(--green-mid); opacity: 0.75; display: block; transition: transform .2s; }
-.info.collapsed .info-toggle { transform: rotate(180deg); }
-.info-toggle svg { display: block; width: 100%; height: 100%; }
-.info.cold { background: rgba(0,0,0,.03); color: var(--ink); }
-.info.cold .info-bold { color: var(--ink); }
-.info.cold .info-toggle { color: var(--ink-2); }
-[data-theme="dark"] .info.cold { background: rgba(255,255,255,.04); }
-
-.rules-banner { display: none; position: relative; padding: 14px 44px 14px 16px; background: #FEEEEF;
-  border-radius: 12px; margin-bottom: 8px; font-size: 15px; line-height: 1.4; color: var(--danger); font-weight: 600; }
-[data-theme="dark"] .rules-banner { background: rgba(224, 122, 98, 0.15); }
-.rules-banner.show { display: block; }
-.rules-banner .close-x { position: absolute; top: 50%; right: 8px; transform: translateY(-50%);
-  width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;
-  font-size: 22px; color: var(--danger); cursor: pointer; border-radius: 50%; }
-
-.ft { display: flex; justify-content: center; align-items: center; gap: 40px; padding: 18px 12px 18px;
-  margin-top: 18px; position: relative; font-size: 14px; color: var(--ink-2); font-weight: 500; transform: translateX(-5px); }
-
-.info-bold { font-weight: 700; }
-.ft a, .ft button { color: var(--ink-3); font: inherit; cursor: pointer; line-height: 1; }
-
-.ov { position: fixed; inset: 0; background: rgba(0,0,0,.55); display: flex; align-items: flex-end; justify-content: center;
-  z-index: 1000; opacity: 0; pointer-events: none; transition: opacity .2s; }
-.ov.a { opacity: 1; pointer-events: auto; }
-.mc { background: var(--bg); width: 100%; max-width: 480px; max-height: 88vh; overflow-y: auto;
-  border-radius: 20px 20px 0 0; padding: 10px 22px 28px; transform: translateY(20px); transition: transform .2s;
-  position: relative; -webkit-overflow-scrolling: touch; }
-.ov.a .mc { transform: translateY(0); }
-.mh { width: 40px; height: 4px; background: var(--line); border-radius: 2px; margin: 4px auto 16px; }
-.mc-title { font-size: 22px; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 16px; }
-.mc-sub { display: none; }
-.mc-close { position: absolute; top: 12px; right: 14px; width: 36px; height: 36px; border-radius: 50%;
-  display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,.04); font-size: 20px; }
-.mc-body { font-size: 14.5px; line-height: 1.6; }
-.mc-body h3 { font-size: 17px; font-weight: 800; margin: 18px 0 8px; padding-top: 14px; border-top: 1px solid var(--line); }
-.mc-body h3:first-of-type { border-top: none; padding-top: 0; margin-top: 6px; }
-.mc-body h4 { font-size: 15px; font-weight: 700; margin: 12px 0 4px; }
-.mc-body p { margin-bottom: 6px; }
-.mc-body .row { display: grid; grid-template-columns: 100px 1fr; gap: 10px; padding: 6px 0; border-bottom: 1px solid var(--line); font-size: 13.5px; }
-.mc-body .row:last-child { border-bottom: none; }
-.mc-body .row .k { color: var(--ink-3); font-weight: 500; }
-.mc-body .row .v { font-weight: 500; }
-.mc-body .ban-row .k, .mc-body .ban-row .v { color: #D75055; font-weight: 600; }
-
-.species-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin: 8px 0 4px; }
-.species-btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 10px 8px;
-  border-radius: 8px; background: rgba(0,0,0,.04); font-size: 14px; font-weight: 600; transition: background .15s, color .15s; }
-[data-theme="dark"] .species-btn { background: rgba(255,255,255,.06); }
-.species-btn .chk-wrap { display: none; line-height: 0; }
-.species-btn.sel .chk-wrap { display: inline-block; }
-
-.catch-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 8px; }
-.catch-btn { padding: 20px 12px; border-radius: 12px; font-size: 16px; font-weight: 700; transition: transform .1s, opacity .15s; }
-.catch-btn:active { transform: scale(0.97); }
-.catch-btn.yes { background: var(--green); color: #fff; }
-.catch-btn.no { background: rgba(0,0,0,.06); color: var(--ink); }
-[data-theme="dark"] .catch-btn.no { background: rgba(255,255,255,.08); }
-
-.bucket-row { display: grid; grid-template-columns: 72px 1fr 78px; gap: 10px; padding: 10px 0; align-items: center;
-  border-bottom: 1px solid var(--line); font-size: 13.5px; }
-.bucket-bar { height: 8px; background: rgba(0,0,0,.06); border-radius: 4px; overflow: hidden; position: relative; }
-[data-theme="dark"] .bucket-bar { background: rgba(255,255,255,.08); }
-.bucket-fill { position: absolute; top: 0; left: 0; height: 100%; background: var(--green); border-radius: 4px; }
-.bucket-val { text-align: right; font-variant-numeric: tabular-nums; font-weight: 600; }
-.bucket-val .pct { color: var(--green-mid); }
-.bucket-val .frac { color: var(--ink-3); font-size: 12px; font-weight: 500; }
-
-.journal-row { display: grid; grid-template-columns: 90px 1fr 40px 30px; gap: 8px; padding: 8px 0; font-size: 13px;
-  border-bottom: 1px solid var(--line); align-items: center; }
-.journal-row .j-date { color: var(--ink-3); font-variant-numeric: tabular-nums; font-size: 12px; }
-.journal-row .j-sp { font-weight: 600; }
-.journal-row .j-score { text-align: right; font-variant-numeric: tabular-nums; color: var(--ink-3); }
-.journal-row .j-res { text-align: right; font-weight: 700; }
-.journal-row .j-res.yes { color: var(--green); }
-.journal-row .j-res.no { color: var(--ink-3); }
-
-.toast { position: fixed; top: 68px; left: 50%; transform: translateX(-50%) translateY(-10px);
-  background: var(--ink); color: var(--bg); padding: 10px 18px; border-radius: 20px; font-size: 14px; font-weight: 600;
-  z-index: 2000; opacity: 0; transition: opacity .2s, transform .2s; pointer-events: none; white-space: nowrap;
-  max-width: 90vw; overflow: hidden; text-overflow: ellipsis; }
-.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-
-.ld { padding: 80px 20px; text-align: center; color: var(--ink-3); font-size: 14px; }
-.sp { width: 22px; height: 22px; border: 2px solid var(--line); border-top-color: var(--ink); border-radius: 50%;
-  animation: sp .7s linear infinite; margin: 0 auto 12px; }
-@keyframes sp { to { transform: rotate(360deg) } }
-.err { padding: 14px; background: rgba(0,0,0,.04); color: var(--ink-2); border-radius: 10px; font-size: 14px; margin: 20px 0; line-height: 1.5; }
-
-.fish-dots {
-  display: flex;
-  justify-content: center;
-  gap: 6px;
-  padding: 4px 0 14px;
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body {
+  background: var(--bg); color: var(--fg); font-family: var(--font);
+  font-size: 16px; 
+  font-weight: 700; /* Изменено с 400 на 500 */
+  line-height: 1.35;
+  -webkit-font-smoothing: antialiased; font-variant-numeric: tabular-nums;
 }
-.fish-dots .fd {
-  width: 6px; height: 6px;
-  border-radius: 50%;
-  background: var(--line);
-  transition: background .2s;
+body {
+  max-width: 480px; margin: 0 auto;
+  padding: max(16px, env(safe-area-inset-top)) 20px max(24px, env(safe-area-inset-bottom));
 }
-.fish-dots .fd.active { background: var(--ink); }
-.press-vals,
-.pbar-times {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-  font-variant-numeric: tabular-nums;
-}
-.press-vals > span:nth-child(1),
-.pbar-times > span:nth-child(1) { text-align: left; }
-.press-vals > span:nth-child(2),
-.pbar-times > span:nth-child(2),
-.press-vals > span:nth-child(3),
-.pbar-times > span:nth-child(3),
-.press-vals > span:nth-child(4),
-.pbar-times > span:nth-child(4) { text-align: center; }
-.press-vals > span:nth-child(5),
-.pbar-times > span:nth-child(5) { text-align: right; }
 
-.press-vals { font-size: 15px; margin-bottom: 8px; }
-.pbar-times { font-size: 13px; margin-bottom: 4px; }
-.press-vals > span:nth-child(2),
-.pbar-times > span:nth-child(2) { transform: translateX(-7px); }
-.press-vals > span:nth-child(4),
-.pbar-times > span:nth-child(4) { transform: translateX(7px); }
+/* HEADER */
+.header {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 32px; color: var(--fg-dim); font-size: 14px;
+}
+.h-left { display: flex; gap: 12px; align-items: center; }
+.h-left b { color: var(--fg); font-weight: 500; } /* Изменено на 500 */
+.info-btn {
+  background: none; border: 1px solid var(--line); color: var(--fg-dim);
+  width: 24px; height: 24px; border-radius: 50%; font-size: 12px;
+  cursor: pointer; display: flex; align-items: center; justify-content: center; font-style: italic;
+  font-weight: 500;
+}
+
+/* HERO */
+.hero { margin-bottom: 40px; }
+.hero-title { font-size: 32px; color: var(--bar-high); letter-spacing: 1px; margin-bottom: 6px; text-transform: uppercase; }
+.hero-title.dim { color: var(--fg); }
+.hero-title.bad { color: var(--bad); }
+.hero-time { font-size: 18px; color: var(--fg-dim); }
+
+/* TARGETS */
+.targets { display: flex; flex-direction: column; gap: 12px; margin-bottom: 48px; }
+.target-item { font-size: 20px; color: var(--fg); }
+
+/* GRAPH */
+.graph-section { margin-bottom: 24px; }
+.graph-container { display: flex; align-items: flex-end; gap: 3px; height: 64px; margin-bottom: 8px; }
+.graph-bar { flex: 1; }
+.graph-bar.low { background: var(--bar-low); height: 20%; }
+.graph-bar.mid { background: var(--bar-mid); height: 50%; }
+.graph-bar.high { background: var(--bar-high); height: 100%; }
+.graph-bar.now { background: var(--fg); }
+.graph-labels { display: flex; justify-content: space-between; font-size: 13px; color: var(--fg-dim); }
+.graph-labels span { width: 25%; text-align: center; }
+.graph-labels span:first-child { text-align: left; }
+.graph-labels span:last-child { text-align: right; }
+
+/* DIARY TRIGGER */
+.diary-trigger {
+  width: 100%; padding: 16px; background: var(--surface);
+  border: 1px solid var(--line); border-radius: 4px;
+  color: var(--fg); font-family: inherit; font-size: 16px;
+  cursor: pointer; margin-top: 10px; transition: background 0.1s;
+}
+.diary-trigger:active { background: var(--input-bg); }
+
+/* MODALS */
+.modal-overlay {
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  background: var(--overlay); display: none;
+  align-items: flex-end; justify-content: center; 
+  padding: 0; z-index: 100;
+}
+.modal-overlay.active { display: flex; }
+
+.modal-content {
+  background: var(--surface); 
+  border: 1px solid var(--line); border-bottom: none;
+  border-radius: 12px 12px 0 0; 
+  padding: 24px;
+  width: 100%; max-width: 480px; 
+  max-height: 90vh; overflow-y: auto;
+  font-size: 14px; color: var(--fg-dim); line-height: 1.5;
+  padding-bottom: max(24px, env(safe-area-inset-bottom));
+}
+.modal-content h3 { color: var(--fg); font-size: 18px; margin-bottom: 20px; }
+
+@media (min-width: 500px) {
+  .modal-overlay { align-items: center; padding: 20px; }
+  .modal-content {
+    border-bottom: 1px solid var(--line);
+    border-radius: 12px;
+    padding-bottom: 24px;
+  }
+}
+
+.close-btn {
+  background: none; border: 1px solid var(--line); color: var(--fg);
+  padding: 14px; border-radius: 4px; margin-top: 20px;
+  cursor: pointer; width: 100%; font-family: inherit; font-size: 16px;
+}
+
+/* DIARY FORM */
+.d-row { margin-bottom: 18px; }
+.d-row label { display: block; font-size: 13px; color: var(--fg-dim); margin-bottom: 8px; }
+.d-buttons { display: flex; gap: 6px; flex-wrap: wrap; }
+.d-buttons button {
+  flex: 1; min-width: 60px; padding: 12px 4px;
+  background: var(--input-bg); border: 1px solid var(--line);
+  border-radius: 4px; color: var(--fg-dim); font-family: inherit;
+  font-size: 14px; cursor: pointer; transition: all 0.1s;
+}
+.d-buttons button.on { 
+  background: var(--bar-high); 
+  color: var(--btn-on-text); 
+  border-color: var(--bar-high); 
+  font-weight: 700; /* Оставил 700 для контраста */
+}
+.d-input-row { display: flex; gap: 12px; }
+.d-input-row > div { flex: 1; }
+.d-input-row input {
+  width: 100%; padding: 14px; background: var(--input-bg);
+  border: 1px solid var(--line); border-radius: 4px;
+  color: var(--fg); font-family: inherit; font-size: 18px; text-align: center;
+}
+.d-input-row input:focus { outline: none; border-color: var(--fg); }
+.d-gps {
+  width: 100%; padding: 14px; background: var(--input-bg);
+  border: 1px solid var(--line); border-radius: 4px;
+  color: var(--fg); font-family: inherit; font-size: 15px; cursor: pointer;
+}
+.d-gps.ok { color: var(--bar-high); border-color: var(--bar-high); }
+.d-actions { display: flex; gap: 10px; margin-top: 24px; }
+.d-save, .d-cancel {
+  flex: 1; padding: 16px; border-radius: 4px;
+  font-family: inherit; font-size: 16px; cursor: pointer; border: 1px solid var(--line);
+}
+.d-save { background: var(--bar-high); color: var(--btn-on-text); border-color: var(--bar-high); font-weight: 700; }
+.d-cancel { background: none; color: var(--fg-dim); }
+
+/* EXPORT */
+.d-export { margin-top: 32px; padding-top: 20px; border-top: 1px solid var(--line); }
+.d-export button {
+  width: 100%; padding: 14px; background: none; border: 1px dashed var(--fg-dim);
+  border-radius: 4px; color: var(--fg); font-family: inherit; font-size: 14px; cursor: pointer;
+}
 </style>
 </head>
 <body>
 
-<header class="hd">
-  <div class="hd-l" id="hdLogo"></div>
-  <div class="hd-m" id="hdLoc"></div>
-  <div class="hd-r" id="hdR"></div>
+<header class="header">
+  <div class="h-left">
+    <span id="h-date">--.--</span>
+    <span id="h-wx">☁️ --°</span>
+    <span id="h-wind">➔ -- м/с <span style="font-size:13px" id="h-gust">+--</span></span>
+  </div>
+  <button class="info-btn" onclick="toggleModal('infoModal')">i</button>
 </header>
 
 <main id="app">
-  <div class="ld"><div class="sp"></div>Загрузка</div>
+  <div class="hero-title dim">ЗАГРУЗКА...</div>
 </main>
 
-<div class="ov" id="ov">
-  <div class="mc">
-    <div class="mh"></div>
-    <button class="mc-close" id="mcClose">×</button>
-    <div class="mc-title" id="mcTitle"></div>
-    <div class="mc-sub" id="mcSub"></div>
-    <div class="mc-body" id="mcBody"></div>
+<div class="modal-overlay" id="infoModal" onclick="if(event.target === this) toggleModal('infoModal')">
+  <div class="modal-content">
+    <h3>Данные</h3>
+    <p>Погода: Open-Meteo. Температура воды не измеряется.</p>
+    <p>Высокий зеленый — жор. Средний — слабый клёв. Низкий — глухо.</p>
+    <div id="legal-info" style="color: var(--bad); margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--line);"></div>
+    <button class="close-btn" onclick="toggleModal('infoModal')">Закрыть</button>
+  </div>
+</div>
+
+<div class="modal-overlay" id="diaryModal" onclick="if(event.target === this) closeDiary()">
+  <div class="modal-content">
+    <h3>Новая запись</h3>
+    <div style="font-size: 13px; color: var(--fg-dim); margin-bottom: 24px; padding-bottom: 12px; border-top: 1px solid var(--line);">
+      Автозаполнение: <span id="d-auto" style="color: var(--fg);">...</span>
+    </div>
+
+    <div class="d-row">
+      <label>Цель / Улов</label>
+      <div class="d-buttons" data-group="fish">
+        <button onclick="pickBtn(this, 'fish', 'Щука')">Щука</button>
+        <button onclick="pickBtn(this, 'fish', 'Окунь')">Окунь</button>
+        <button onclick="pickBtn(this, 'fish', 'Плотва')">Плотва</button>
+        <button onclick="pickBtn(this, 'fish', 'Голавль')">Голавль</button>
+        <button onclick="pickBtn(this, 'fish', 'Хариус')">Хариус</button>
+      </div>
+    </div>
+
+    <div class="d-row">
+      <label>Сколько поймал?</label>
+      <div class="d-buttons" data-group="catch">
+        <button onclick="pickBtn(this, 'catch', '0')">0 (пусто)</button>
+        <button onclick="pickBtn(this, 'catch', '1')">1</button>
+        <button onclick="pickBtn(this, 'catch', '2')">2</button>
+        <button onclick="pickBtn(this, 'catch', '3+')">3+</button>
+      </div>
+    </div>
+
+    <div class="d-row">
+      <label>Прозрачность воды</label>
+      <div class="d-buttons" data-group="clarity">
+        <button onclick="pickBtn(this, 'clarity', 'чистая')">Чистая</button>
+        <button onclick="pickBtn(this, 'clarity', 'мутная')">Мутная</button>
+        <button onclick="pickBtn(this, 'clarity', 'кофе')">Кофе</button>
+      </div>
+    </div>
+
+    <div class="d-row">
+      <label>Уровень воды</label>
+      <div class="d-buttons" data-group="level">
+        <button onclick="pickBtn(this, 'level', 'высокий')">Высокий</button>
+        <button onclick="pickBtn(this, 'level', 'норма')">Норма</button>
+        <button onclick="pickBtn(this, 'level', 'низкий')">Низкий</button>
+      </div>
+    </div>
+
+    <div class="d-row">
+      <label>Температура воды (°C) и Глубина (м)</label>
+      <div class="d-input-row">
+        <div><input type="number" step="0.1" id="d-water" placeholder="Вода"></div>
+        <div><input type="number" step="0.5" id="d-depth" placeholder="Глуб."></div>
+      </div>
+    </div>
+
+    <div class="d-row">
+      <button class="d-gps" onclick="getGPS()" id="d-gps-btn">📍 Запомнить точку</button>
+    </div>
+
+    <div class="d-actions">
+      <button class="d-save" onclick="saveEntry()">Сохранить</button>
+      <button class="d-cancel" onclick="closeDiary()">Отмена</button>
+    </div>
+
+    <div class="d-export">
+      <button onclick="exportCSV()" id="d-export-btn">↓ Экспорт CSV (0)</button>
+    </div>
   </div>
 </div>
 
 <script>
 'use strict';
 
-var LAT = 54.9827, LON = 25.7671;
-var TZ = Intl.DateTimeFormat().resolvedOptions().timeZone || 'Europe/Vilnius';
+const TZ = 'Europe/Vilnius';
+const LAT = 54.98;
+const LON = 25.77;
 
-var SPECIES = {
-  perch:   { name: 'Окунь',   waterOpt: [12, 20], w: { pr: 0.25, wt: 0.20, wn: 0.20, wd: 0.10, cl: 0.15, rn: 0.10 },
-    season: 'круглый год · пик май–июль' },
-  pike:    { name: 'Щука',    waterOpt: [10, 18], w: { pr: 0.30, wt: 0.25, wn: 0.15, wd: 0.10, cl: 0.10, rn: 0.10 },
-    season: 'май · сентябрь–ноябрь' },
-  roach:   { name: 'Плотва',  waterOpt: [12, 22], w: { pr: 0.25, wt: 0.20, wn: 0.15, wd: 0.10, cl: 0.15, rn: 0.15 },
-    season: 'апрель–май · сентябрь–октябрь' },
-  chub:    { name: 'Голавль', waterOpt: [14, 22], w: { pr: 0.25, wt: 0.20, wn: 0.20, wd: 0.10, cl: 0.15, rn: 0.10 },
-    season: 'май–сентябрь' },
-  bream:   { name: 'Лещ',     waterOpt: [15, 22], w: { pr: 0.30, wt: 0.25, wn: 0.15, wd: 0.10, cl: 0.10, rn: 0.10 },
-    season: 'июнь–август' },
-  crucian: { name: 'Карась',  waterOpt: [18, 25], w: { pr: 0.20, wt: 0.35, wn: 0.15, wd: 0.05, cl: 0.10, rn: 0.15 },
-    season: 'июнь–август' }
-};
-var ORDER = ['perch', 'pike', 'roach', 'chub', 'bream', 'crucian'];
-
-var SPECIES_INFO = {
-  perch:   { weight: '50–250 г, трофей до 1 кг', norm: 'входит в общий лимит 5 кг', minSize: '— (нет ограничения)', fine: '—', ban: '—' },
-  pike:    { weight: '1–3 кг, трофей до 8 кг',    norm: '1 шт/сутки (от 65 см)',     minSize: '65 см', fine: '120–300 € + ущерб', ban: 'нерест 01.03–30.04' },
-  roach:   { weight: '50–200 г, трофей до 500 г', norm: 'входит в общий лимит 5 кг', minSize: '— (нет ограничения)', fine: '—', ban: '—' },
-  chub:    { weight: '200–800 г, трофей до 2 кг', norm: 'входит в общий лимит 5 кг', minSize: '30 см', fine: '120–300 € + ущерб', ban: '—' },
-  bream:   { weight: '500–1500 г, трофей до 3 кг', norm: 'входит в общий лимит 5 кг', minSize: '— (нет ограничения)', fine: '—', ban: '—' },
-  crucian: { weight: '100–500 г, трофей до 1 кг', norm: 'входит в общий лимит 5 кг', minSize: '— (нет ограничения)', fine: '—', ban: '—' }
+const RULES = {
+  pike: { name: 'Щука', start: '02-01', end: '04-30' },
+  grayling: { name: 'Хариус', start: '03-01', end: '05-15' },
+  asp: { name: 'Жерех', start: '04-01', end: '05-15' },
+  zander: { name: 'Судак', start: '03-01', end: '05-31' }
 };
 
-var TA = {
-  perch:   { dawn: 1.55, day: 0.95, dusk: 0.90, night: 0.45 },
-  pike:    { dawn: 1.40, day: 0.35, dusk: 1.55, night: 0.70 },
-  roach:   { dawn: 1.00, day: 0.60, dusk: 1.65, night: 0.30 },
-  chub:    { dawn: 1.05, day: 0.75, dusk: 1.55, night: 0.35 },
-  bream:   { dawn: 1.50, day: 0.45, dusk: 1.35, night: 0.30 },
-  crucian: { dawn: 1.10, day: 1.30, dusk: 1.25, night: 0.40 }
+let diaryState = {
+  fish: null, catch: '0', clarity: null, level: null, coords: null, context: null
 };
 
-var RU_DOW = ['Вс','Пн','Вт','Ср','Чт','Пт','Сб'];
-var RU_MON = ['янв','фев','мар','апр','мая','июн','июл','авг','сен','окт','ноя','дек'];
-
-function num(v, fb) { return (v == null || isNaN(v)) ? fb : v; }
-function dirName(deg) { return ['С','СВ','В','ЮВ','Ю','ЮЗ','З','СЗ'][Math.round(num(deg,0)/45)%8]; }
-function phase(h, sr, ss) {
-  if (h >= sr - 1.5 && h <= sr + 2) return 'dawn';
-  if (h >= ss - 2 && h <= ss + 1.5) return 'dusk';
-  if (h > sr + 2 && h < ss - 2) return 'day';
-  return 'night';
-}
-function fmtTime(start, end) { return String(start) + '-' + String(end) + '<span class="fr-min">:00</span>'; }
-function fmtSunTime(hhmm) { if (!hhmm) return '—'; var h = parseInt(hhmm.slice(0, 2), 10); return h + ':' + hhmm.slice(3, 5); }
-function fmtJournalDate(ts) { var d = new Date(ts); var hh = String(d.getHours()).padStart(2, '0'); var mm = String(d.getMinutes()).padStart(2, '0'); return d.getDate() + ' ' + RU_MON[d.getMonth()] + ' ' + hh + ':' + mm; }
-function getBanLabel(nowParts) {
-  var t = new Date(nowParts.year, nowParts.month - 1, nowParts.day);
-  var start = new Date(nowParts.year, 9, 16), end = new Date(nowParts.year, 11, 25), monthBefore = new Date(nowParts.year, 8, 16);
-  if (t >= start && t <= end) return '12.25';
-  if (t >= monthBefore && t < start) return '10.16-12.25';
-  return null;
-}
-function getNowParts() {
-  return new Intl.DateTimeFormat('en-US', { timeZone: TZ, year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', hourCycle: 'h23' })
-    .formatToParts(new Date()).reduce(function(acc, p) { if (p.type !== 'literal') acc[p.type] = parseInt(p.value, 10); return acc; }, {});
-}
-function baseScore(hr, k) {
-  if (!hr) return 0;
-  var sp = SPECIES[k], w = sp.w, s = 0;
-  var dp = Math.abs(num(hr.pressureDelta, 0));
-  s += (dp < 1 ? 90 : dp < 3 ? 70 : dp < 6 ? 35 : 10) * w.pr;
-  var wt = num(hr.waterTemp, 15), opt = sp.waterOpt;
-  var ts = wt >= opt[0] && wt <= opt[1] ? 90 : wt >= opt[0]-3 && wt <= opt[1]+3 ? 60 : wt >= opt[0]-6 && wt <= opt[1]+6 ? 25 : 5;
-  s += ts * w.wt;
-  var ws = num(hr.windSpeed, 0), wsc;
-  if (ws >= 3 && ws <= 6) wsc = 90; else if (ws > 6 && ws <= 9) wsc = 60; else if (ws < 3) wsc = 40; else wsc = 15;
-  var wg = num(hr.windGust, 0);
-  if (wg > 12) wsc = Math.min(wsc, 25); else if (wg > 9) wsc = Math.min(wsc, 55);
-  s += wsc * w.wn;
-  var wd = num(hr.windDir, 0), wds;
-  if (wd >= 200 && wd <= 290) wds = 90; else if ((wd >= 160 && wd < 200) || (wd > 290 && wd <= 330)) wds = 65; else if (wd >= 60 && wd < 160) wds = 30; else wds = 15;
-  s += wds * w.wd;
-  var cc = num(hr.cloudCover, 50);
-  s += (cc >= 60 ? 90 : cc >= 30 ? 65 : 35) * w.cl;
-  var r = num(hr.rain, 0);
-  s += ((r > 0 && r <= 3) ? 90 : r === 0 ? 60 : 15) * w.rn;
-  return Math.max(5, Math.min(95, Math.round(s)));
-}
-function hourScore(hr, k, sr, ss) { if (!hr) return null; var b = baseScore(hr, k); var mult = TA[k][phase(hr.hour, sr, ss)]; return Math.max(5, Math.min(95, Math.round(b * mult))); }
-function dayScore(hours, k, sr, ss) {
-  if (!hours || !hours.length) return 0;
-  var sum = 0, cnt = 0;
-  hours.forEach(function(hr) { if (hr) { sum += hourScore(hr, k, sr, ss); cnt++; } });
-  return cnt ? Math.round(sum / cnt) : 0;
-}
-function findWindows(hourScores) {
-  if (!hourScores || hourScores.length < 5) return [];
-  var wins = [];
-  for (var i = 5; i <= 20; i++) {
-    if (i + 2 > 23) break;
-    var a = hourScores[i], b = hourScores[i+1], c = hourScores[i+2];
-    if (a == null || b == null || c == null) continue;
-    wins.push({ start: i, end: i + 3, avg: (a+b+c)/3 });
-  }
-  if (!wins.length) return [];
-  wins.sort(function(x, y) { return y.avg - x.avg; });
-  var result = [wins[0]];
-  for (var j = 1; j < wins.length && result.length < 2; j++) {
-    var w = wins[j], ok = true;
-    for (var r = 0; r < result.length; r++) {
-      var e = result[r];
-      if (!(w.end <= e.start || w.start >= e.end)) { ok = false; break; }
-      if (Math.abs(w.start - e.end) < 2 || Math.abs(e.start - w.end) < 2) { ok = false; break; }
-    }
-    if (ok) result.push(w);
-  }
-  return result;
+function toggleModal(id) {
+  document.getElementById(id).classList.toggle('active');
 }
 
-function buildUrl() {
-  return 'https://api.open-meteo.com/v1/forecast?latitude=' + LAT + '&longitude=' + LON +
-    '&hourly=surface_pressure,temperature_2m,wind_speed_10m,wind_direction_10m,wind_gusts_10m,cloud_cover,precipitation,weather_code' +
-    '&daily=sunrise,sunset,temperature_2m_max,temperature_2m_min,wind_speed_10m_max,wind_direction_10m_dominant,cloud_cover_mean,precipitation_sum,surface_pressure_mean,weather_code' +
-    '&past_days=5&forecast_days=4&timezone=' + encodeURIComponent(TZ) + '&wind_speed_unit=ms';
-}
-function fetchT(url) {
-  var c = new AbortController();
-  var t = setTimeout(function() { c.abort(); }, 12000);
-  return fetch(url, { signal: c.signal }).then(function(r) { clearTimeout(t); if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
-    .catch(function(e) { clearTimeout(t); throw e; });
-}
-function waterFn(air, mo) {
-  var b = air * 0.8 + 2;
-  if (mo === 12 || mo <= 2) b += 2;
-  if (mo >= 6 && mo <= 8) b += 1.5;
-  if (mo >= 3 && mo <= 5) b -= 0.5;
-  return b;
-}
-function processData(json) {
-  var h = json.hourly, d = json.daily;
-  if (!d || !d.time || !d.time.length) throw new Error('Пустой ответ');
-  var hIdx = {}; h.time.forEach(function(t, i) { hIdx[t] = i; });
-  var fmt = new Intl.DateTimeFormat('en-CA', { timeZone: TZ, year: 'numeric', month: '2-digit', day: '2-digit', hourCycle: 'h23' });
-  var days = d.time.map(function(date, i) {
-    var sr = d.sunrise && d.sunrise[i] ? d.sunrise[i] : date + 'T07:00';
-    var ss = d.sunset && d.sunset[i] ? d.sunset[i] : date + 'T19:00';
-    return {
-      date: date, sunrise: sr.slice(11, 16), sunset: ss.slice(11, 16),
-      srH: parseInt(sr.slice(11,13),10) + parseInt(sr.slice(14,16),10)/60,
-      ssH: parseInt(ss.slice(11,13),10) + parseInt(ss.slice(14,16),10)/60,
-      tMax: num(d.temperature_2m_max[i], null), tMin: num(d.temperature_2m_min[i], null),
-      wMax: num(d.wind_speed_10m_max[i], null), wDir: num(d.wind_direction_10m_dominant[i], 0),
-      cMean: num(d.cloud_cover_mean[i], null), rain: num(d.precipitation_sum[i], 0),
-      pMean: num(d.surface_pressure_mean[i], null), wCode: num(d.weather_code && d.weather_code[i], 0)
-    };
-  });
-  var hourlyByDay = days.map(function(day, di) {
-    var sum = 0, cnt = 0;
-    for (var i = Math.max(0, di - 4); i <= di; i++) { sum += (num(days[i].tMax, 10) + num(days[i].tMin, 5)) / 2; cnt++; }
-    var airAvg = cnt ? sum / cnt : 10;
-    var mo = parseInt(day.date.slice(5,7), 10);
-    var wT = waterFn(airAvg, mo);
-    var arr = [];
-    for (var hh = 0; hh <= 23; hh++) {
-      var key = day.date + 'T' + String(hh).padStart(2, '0') + ':00';
-      var idx = hIdx[key];
-      if (idx == null) { arr.push(null); continue; }
-      var prev = new Date(day.date + 'T12:00:00'); prev.setDate(prev.getDate() - 1);
-      var pk = fmt.format(prev) + 'T' + String(hh).padStart(2, '0') + ':00';
-      var j = hIdx[pk];
-      var dP = 0;
-      if (j != null && h.surface_pressure[idx] != null && h.surface_pressure[j] != null) dP = h.surface_pressure[idx] - h.surface_pressure[j];
-      var airT = h.temperature_2m[idx];
-      if (airT == null) airT = (num(day.tMax,10) + num(day.tMin,5)) / 2;
-      arr.push({
-        hour: hh, pressureDelta: dP, waterTemp: wT, airTemp: airT,
-        pressure: num(h.surface_pressure[idx], null), cloudCover: num(h.cloud_cover[idx], num(day.cMean, 50)),
-        windSpeed: num(h.wind_speed_10m[idx], num(day.wMax, 0)), windDir: num(h.wind_direction_10m[idx], num(day.wDir, 0)),
-        windGust: num(h.wind_gusts_10m && h.wind_gusts_10m[idx], 0), rain: num(h.precipitation[idx], 0),
-        wCode: num(h.weather_code && h.weather_code[idx], 0)
-      });
-    }
-    return arr;
-  });
-  var todayStr = fmt.format(new Date());
-  var tIdx = days.findIndex(function(x) { return x.date === todayStr; });
-  if (tIdx === -1) tIdx = Math.min(5, days.length - 1);
-  return { days: days, tIdx: tIdx, hourlyByDay: hourlyByDay };
+function isBanned(md, rule) { return md >= rule.start && md <= rule.end; }
+
+function getDirArrow(deg) {
+  if (deg == null) return '➔';
+  const arrows = ['↑', '↗', '→', '↘', '↓', '↙', '←', '↖'];
+  return arrows[Math.round(deg / 45) % 8];
 }
 
-var state = { selected: null, data: null, launchCount: 0 };
-
-function applyTheme(dark) {
-  document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
-  document.querySelector('meta[name="theme-color"]').setAttribute('content', dark ? '#0d0d0d' : '#faf9f5');
-}
-applyTheme(window.matchMedia('(prefers-color-scheme:dark)').matches);
-window.matchMedia('(prefers-color-scheme:dark)').addEventListener('change', function(e) {
-  applyTheme(e.matches);
-  if (state.data) render(state.data);
-});
-function getJournal() { try { return JSON.parse(localStorage.getItem('klew_journal') || '[]'); } catch(e) { return []; } }
-function saveJournal(arr) { try { localStorage.setItem('klew_journal', JSON.stringify(arr.slice(-1000))); } catch(e) {} }
-function addEntry(entry) { var j = getJournal(); j.push(entry); saveJournal(j); }
-
-function makeSnapshot(species) {
-  if (!state.data) return null;
-  var p = state.data, today = p.days[p.tIdx];
-  var now = getNowParts(), idx = Math.max(0, Math.min(23, now.hour));
-  var hr = p.hourlyByDay[p.tIdx][idx];
-  if (!hr) return null;
-  var score = hourScore(hr, species, today.srH, today.ssH);
-  return { ts: Date.now(), date: today.date, hour: now.hour, species: species, score: score == null ? 0 : score,
-    water: Math.round(hr.waterTemp), air: Math.round(num(hr.airTemp, 0)),
-    pressureDelta: Math.round(num(hr.pressureDelta, 0) * 10) / 10,
-    windSpeed: Math.round(num(hr.windSpeed, 0) * 10) / 10, windDir: num(hr.windDir, 0),
-    cloudCover: Math.round(num(hr.cloudCover, 0)), rain: Math.round(num(hr.rain, 0) * 10) / 10 };
-}
-function sunColor(code) { if (code === 0 || code === 1 || code === 2) return '#e8912a'; return '#9a9a9a'; }
-
-function svgLogo() {
-  return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 61.402 26.675"><g fill="currentColor"><path d="M49.662 5.523 C49.662 4.805 50.233 4.223 50.937 4.223 L55.815 4.223 C57.456 4.223 58.711 4.577 59.581 5.285 C60.451 5.994 60.886 6.915 60.886 8.048 C60.886 8.918 60.636 9.645 60.137 10.229 C59.637 10.812 58.971 11.198 58.137 11.387 L58.137 11.408 C58.752 11.448 59.306 11.622 59.799 11.929 C60.292 12.236 60.683 12.654 60.97 13.184 C61.258 13.713 61.402 14.332 61.402 15.04 C61.402 15.87 61.202 16.606 60.802 17.246 C60.401 17.887 59.819 18.39 59.055 18.754 C58.291 19.119 57.36 19.301 56.261 19.301 L50.937 19.301 C50.233 19.301 49.662 18.719 49.662 18 Z M53.824 7.016 C53.449 7.016 53.145 7.326 53.145 7.708 L53.145 9.653 C53.145 10.035 53.449 10.345 53.824 10.345 L55.477 10.345 C56.046 10.345 56.496 10.195 56.827 9.895 C57.158 9.595 57.323 9.188 57.323 8.675 C57.323 8.169 57.158 7.766 56.827 7.466 C56.496 7.166 56.046 7.016 55.477 7.016 Z M53.822 12.996 C53.448 12.996 53.145 13.305 53.145 13.687 L53.145 15.817 C53.145 16.199 53.448 16.508 53.822 16.508 L55.676 16.508 C56.324 16.508 56.834 16.354 57.204 16.047 C57.575 15.74 57.76 15.317 57.76 14.777 C57.76 14.231 57.576 13.797 57.209 13.477 C56.842 13.157 56.337 12.996 55.696 12.996 Z"/><path d="M38.74 0.758 C39.078 0.253 39.504 0 40.02 0 C40.543 0 40.973 0.253 41.311 0.758 C41.624 1.226 41.792 1.81 41.814 2.508 L38.237 2.508 C38.259 1.81 38.427 1.226 38.74 0.758 Z M43.266 0.758 C43.603 0.253 44.03 0 44.546 0 C45.069 0 45.499 0.253 45.836 0.758 C46.149 1.226 46.317 1.81 46.34 2.508 L42.762 2.508 C42.785 1.81 42.952 1.226 43.266 0.758 Z M36.553 5.758 C36.553 4.91 37.227 4.223 38.059 4.223 L47.569 4.223 L47.569 7.319 L40.719 7.319 C40.247 7.319 39.864 7.71 39.864 8.191 L39.864 9.352 C39.864 9.833 40.247 10.224 40.719 10.224 L43.579 10.224 L47.004 10.224 L47.004 13.229 L40.719 13.229 C40.247 13.229 39.864 13.619 39.864 14.101 L39.864 15.333 C39.864 15.814 40.247 16.204 40.719 16.204 L47.569 16.204 L47.569 19.301 L38.059 19.301 C37.227 19.301 36.553 18.613 36.553 17.766 Z"/><path d="M8.63 20.693 L8.532 4.223 L12.104 4.223 L12.104 9.475 C12.104 9.788 12.353 10.041 12.66 10.041 L12.987 10.041 C13.162 10.041 13.327 9.957 13.432 9.814 C13.432 9.814 16.486 7.016 17.523 4.223 L21.622 4.223 C19.888 8.383 16.486 11.023 16.486 11.023 C16.26 11.322 16.259 11.738 16.482 12.038 C16.482 12.038 18.615 15.744 22.044 18.251 C23.105 19.027 19.968 21.49 19.068 20.532 C15.125 16.332 15.783 16.604 13.452 13.386 C13.347 13.243 13.182 13.158 13.007 13.158 L12.66 13.158 C12.353 13.158 12.104 13.412 12.104 13.725 L12.104 20.662 Z"/><path d="M23.558 5.799 C23.63 4.908 24.36 4.223 25.237 4.223 L32.905 4.223 C33.552 4.223 34.076 4.758 34.076 5.418 L34.076 19.301 L30.504 19.301 L30.504 9.474 L30.504 8.032 C30.504 7.638 30.185 7.319 29.791 7.319 L27.627 7.319 C27.233 7.319 26.914 7.638 26.914 8.032 C26.914 8.032 26.92 8.98 26.884 9.459 C25.557 27.542 9.312 27.077 6.396 26.467 C1.44 25.431 0 22.429 0 19.985 C0 16.349 3.111 13.969 6.848 14.752 L6.848 17.445 C2.528 17.057 2.365 23.026 8.258 23.448 C12.756 23.77 24.753 22.052 23.558 5.799 Z"/></g></svg>';
-}
-function svgSunrise(color) {
-  return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 10.875" style="color:' + (color || '#9a9a9a') + '"><path d="M9.1 4 L9.1 0 L10.9 0 L10.9 4 Z M2.35 3.575 L3.575 2.35 L6.4 5.175 L5.175 6.4 Z M13.6 5.175 L16.425 2.35 L17.65 3.575 L14.825 6.4 Z M5.5 10 C5.5 7.55 7.475 5.575 10 5.575 C12.525 5.575 14.5 7.55 14.5 10 C14.5 10.292 14.471 10.579 14.416 10.857 L5.584 10.857 C5.529 10.579 5.5 10.292 5.5 10 Z M0 10.857 L0 9.125 L4 9.125 L4 10.857 Z M16 10.857 L16 9.125 L20 9.125 L20 10.875 L19.987 10.875 L19.987 10.857 Z" fill="currentColor"/></svg>';
-}
-function svgWater() { return '<svg width="22" height="22" viewBox="0 0 18 18"><path d="M13.6 16.2 C15.45 16.2 15.6 14.2 18 14.2 L18 16 C16.375 16 16.2 18 13.6 18 C11 18 10.85 16 9 16 C7.15 16 6.975 18 4.4 18 C1.8 18 1.625 16 0 16 L0 14.2 C2.4 14.2 2.55 16.2 4.4 16.2 C6.25 16.2 6.425 14.2 9 14.2 C11.6 14.2 11.75 16.2 13.6 16.2 Z M13.6 2 C15.45 2 15.6 0 18 0 L18 1.8 C16.375 1.8 16.2 3.8 13.6 3.8 C11 3.8 10.85 1.8 9 1.8 C7.15 1.8 6.975 3.8 4.4 3.8 C1.8 3.8 1.625 1.8 0 1.8 L0 0 C2.4 0 2.55 2 4.4 2 C6.25 2 6.425 0 9 0 C11.6 0 11.75 2 13.6 2 Z M13.6 9.1 C15.45 9.1 15.6 7.1 18 7.1 L18 8.9 C16.375 8.9 16.2 10.9 13.6 10.9 C11 10.9 10.85 8.9 9 8.9 C7.15 8.9 6.975 10.9 4.4 10.9 C1.8 10.9 1.625 8.9 0 8.9 L0 7.1 C2.4 7.1 2.55 9.1 4.4 9.1 C6.25 9.1 6.425 7.1 9 7.1 C11.6 7.1 11.75 9.1 13.6 9.1 Z" fill="currentColor"/></svg>'; }
-function svgRain() { return '<svg width="22" height="22" viewBox="0 0 20.85 18.525"><path d="M9.525 14.525 L11.325 14.525 L11.325 18.525 L9.525 18.525 Z M14.625 14.525 L16.425 14.525 L16.425 18.525 L14.625 18.525 Z M4.425 14.525 L6.225 14.525 L6.225 18.525 L4.425 18.525 Z M4.725 12.525 C2.075 12.525 0 10.45 0 7.825 C0 5.2 2.075 3.125 4.7 3.125 L5.725 3.125 C6.4 1.275 8.225 0 10.425 0 C12.625 0 14.45 1.275 15.125 3.125 L16.15 3.125 C18.775 3.125 20.85 5.2 20.85 7.825 C20.85 10.45 18.775 12.525 16.125 12.525 Z M16.125 10.675 C17.725 10.675 18.95 9.425 18.95 7.825 C18.95 6.25 17.725 5 16.15 5 L13.5 5 L13.5 4.975 C13.5 3.25 12.15 1.85 10.425 1.85 C8.7 1.85 7.35 3.25 7.35 4.975 L7.35 5 L4.7 5 C3.125 5 1.9 6.25 1.9 7.825 C1.9 9.425 3.125 10.675 4.725 10.675 Z" fill="currentColor"/></svg>'; }
-function svgWind() { return '<svg width="22" height="22" viewBox="0 0 18 20"><path d="M0 7.025 L0 5.225 L11.95 5.225 C12.9 5.225 13.65 4.475 13.65 3.5 C13.65 2.55 12.9 1.8 11.95 1.8 L10.475 1.8 L10.475 0 L11.95 0 C13.95 0 15.5 1.55 15.5 3.5 C15.5 5.475 13.95 7.025 11.95 7.025 Z M11.925 12.975 C13.925 12.975 15.5 14.525 15.5 16.5 C15.5 18.45 13.925 20 11.925 20 L10.5 20 L10.5 18.2 L11.925 18.2 C12.9 18.2 13.65 17.45 13.65 16.5 C13.65 15.525 12.9 14.775 11.925 14.775 L0 14.775 L0 12.975 Z M3 10.9 L3 9.1 L18 9.1 L18 10.9 Z" fill="currentColor"/></svg>'; }
-function svgWxSun() { return '<svg viewBox="0 0 10 10"><path d="M5 6.987 C3.875 6.987 3 6.125 3 5 C3 3.875 3.875 3.012 5 3.012 C6.125 3.012 7 3.875 7 5 C7 6.125 6.125 6.987 5 6.987 Z M5 6.112 C5.65 6.112 6.113 5.65 6.113 5 C6.113 4.35 5.65 3.887 5 3.887 C4.375 3.887 3.887 4.375 3.887 5 C3.887 5.65 4.363 6.112 5 6.112 Z M1.787 8.862 L1.137 8.212 L2.55 6.8 L3.2 7.45 Z M0 5.462 L0 4.537 L2 4.537 L2 5.462 Z M4.525 10 L4.525 8 L5.475 8 L5.475 10 Z M8.213 8.862 L6.8 7.45 L7.45 6.8 L8.863 8.212 Z M2.55 3.2 L1.137 1.787 L1.787 1.137 L3.2 2.55 Z M4.525 2 L4.525 0 L5.475 0 L5.475 2 Z M8 5.462 L8 4.537 L10 4.537 L10 5.462 Z M7.45 3.2 L6.8 2.55 L8.213 1.137 L8.863 1.787 Z" fill="currentColor"/></svg>'; }
-function svgWxPartlyCloudy() { return '<svg viewBox="0 0 9 8.953"><path d="M2.04 8.953 C0.921 8.953 0.023 8.056 0.023 6.913 C0.023 5.782 0.921 4.896 2.04 4.896 L2.273 4.896 C2.063 4.593 1.947 4.22 1.947 3.824 C1.947 2.798 2.775 1.982 3.824 1.982 C4.675 1.982 5.386 2.518 5.619 3.288 C5.794 3.253 5.969 3.241 6.144 3.241 C7.741 3.241 9 4.5 9 6.109 C9 7.694 7.741 8.953 6.144 8.953 Z M6.144 8.114 C7.263 8.114 8.137 7.228 8.137 6.109 C8.137 4.978 7.263 4.08 6.144 4.08 C5.188 4.08 4.302 4.803 4.127 5.736 L2.04 5.736 C1.399 5.736 0.886 6.249 0.886 6.913 C0.886 7.589 1.399 8.114 2.04 8.114 Z M3.416 0 L4.232 0 L4.232 1.282 L3.416 1.282 Z M0.828 1.411 L1.411 0.828 L2.308 1.725 L1.725 2.308 Z M0 4.232 L0 3.416 L1.282 3.416 L1.282 4.232 Z M5.922 2.308 L5.339 1.725 L6.237 0.828 L6.82 1.411 Z" fill="currentColor"/></svg>'; }
-function svgWxCloud() { return '<svg viewBox="0 0 11 8.007"><path d="M2.746 1.499 C3.07 0.612 3.945 0 5 0 C6.055 0 6.93 0.612 7.254 1.499 L7.746 1.499 C9.005 1.499 10 2.494 10 3.753 C10 3.792 9.999 3.831 9.997 3.87 L9.997 3.87 C10.605 4.271 11 4.959 11 5.753 C11 7.012 10.005 8.007 8.734 8.007 L5.266 8.007 C4.082 8.007 3.137 7.143 3.014 6.007 L2.266 6.007 C0.995 6.007 0 5.012 0 3.753 C0 2.494 0.995 1.499 2.254 1.499 Z M5 0.887 C4.173 0.887 3.525 1.559 3.525 2.386 L3.525 2.398 L2.254 2.398 C1.499 2.398 0.911 2.998 0.911 3.753 C0.911 4.52 1.499 5.12 2.266 5.12 L7.734 5.12 C8.501 5.12 9.089 4.52 9.089 3.753 C9.089 2.998 8.501 2.398 7.746 2.398 L6.475 2.398 L6.475 2.386 C6.475 1.559 5.827 0.887 5 0.887 Z M9.734 4.827 C9.356 5.534 8.61 6.007 7.734 6.007 L3.933 6.007 C4.047 6.649 4.586 7.12 5.266 7.12 L8.734 7.12 C9.501 7.12 10.089 6.52 10.089 5.753 C10.089 5.393 9.955 5.068 9.734 4.827 Z" fill="currentColor"/></svg>'; }
-function svgWxRain() { return '<svg viewBox="0 0 10 8.885"><path d="M4.568 6.966 L5.432 6.966 L5.432 8.885 L4.568 8.885 Z M7.014 6.966 L7.878 6.966 L7.878 8.885 L7.014 8.885 Z M2.122 6.966 L2.986 6.966 L2.986 8.885 L2.122 8.885 Z M2.266 6.007 C0.995 6.007 0 5.012 0 3.753 C0 2.494 0.995 1.499 2.254 1.499 L2.746 1.499 C3.07 0.612 3.945 0 5 0 C6.055 0 6.93 0.612 7.254 1.499 L7.746 1.499 C9.005 1.499 10 2.494 10 3.753 C10 5.012 9.005 6.007 7.734 6.007 Z M7.734 5.12 C8.501 5.12 9.089 4.52 9.089 3.753 C9.089 2.998 8.501 2.398 7.746 2.398 L6.475 2.398 L6.475 2.386 C6.475 1.559 5.827 0.887 5 0.887 C4.173 0.887 3.525 1.559 3.525 2.386 L3.525 2.398 L2.254 2.398 C1.499 2.398 0.911 2.998 0.911 3.753 C0.911 4.52 1.499 5.12 2.266 5.12 Z" fill="currentColor"/></svg>'; }
-function svgWxSnow() { return '<svg viewBox="0 0 10 10"><path d="M4.575 10 L4.575 7.687 L3.075 9.325 L2.487 8.75 L4.575 6.687 L4.575 5.412 L3.312 5.412 L1.275 7.5 L0.675 6.912 L2.312 5.412 L0 5.412 L0 4.587 L2.312 4.587 L0.675 3.087 L1.275 2.5 L3.312 4.587 L4.575 4.587 L4.575 3.312 L2.487 1.25 L3.075 0.675 L4.575 2.312 L4.575 0 L5.425 0 L5.425 2.312 L6.925 0.675 L7.513 1.25 L5.425 3.312 L5.425 4.587 L6.688 4.587 L8.725 2.5 L9.325 3.087 L7.688 4.587 L10 4.587 L10 5.412 L7.688 5.412 L9.325 6.912 L8.725 7.5 L6.688 5.412 L5.425 5.412 L5.425 6.687 L7.513 8.75 L6.925 9.325 L5.425 7.687 L5.425 10 Z" fill="currentColor"/></svg>'; }
-function svgWxFog() { return '<svg viewBox="0 0 9 9"><path d="M2 8.1 L9 8.1 L9 9 L2 9 Z M0 0 L7 0 L7 0.9 L0 0.9 Z M2 2.7 L9 2.7 L9 3.6 L2 3.6 Z M0 5.4 L7 5.4 L7 6.3 L0 6.3 Z" fill="currentColor"/></svg>'; }
-function svgWxThunder() { return '<svg viewBox="0 0 10 8.885"><path d="M4.844 8.885 L5.06 7.686 L3.909 7.686 L4.209 6.007 L2.266 6.007 C0.995 6.007 0 5.012 0 3.753 C0 2.494 0.995 1.499 2.254 1.499 L2.746 1.499 C3.07 0.612 3.945 0 5 0 C6.055 0 6.93 0.612 7.254 1.499 L7.746 1.499 C9.005 1.499 10 2.494 10 3.753 C10 5.012 9.005 6.007 7.734 6.007 L5.036 6.007 L4.868 6.966 L6.139 6.966 L5.432 8.885 Z M7.014 6.966 L7.878 6.966 L7.878 8.885 L7.014 8.885 Z M2.122 6.966 L2.986 6.966 L2.986 8.885 L2.122 8.885 Z M7.734 5.12 C8.501 5.12 9.089 4.52 9.089 3.753 C9.089 2.998 8.501 2.398 7.746 2.398 L6.475 2.398 L6.475 2.386 C6.475 1.559 5.827 0.887 5 0.887 C4.173 0.887 3.525 1.559 3.525 2.386 L3.525 2.398 L2.254 2.398 C1.499 2.398 0.911 2.998 0.911 3.753 C0.911 4.52 1.499 5.12 2.266 5.12 Z" fill="currentColor"/></svg>'; }
-function svgTemp() { return '<svg width="22" height="22" viewBox="0 0 18.5 18.75"><path d="M12.5 5.225 L12.5 3.375 L18.5 3.375 L18.5 5.225 Z M12.5 10.6 L12.5 8.75 L18.5 8.75 L18.5 10.6 Z M12.5 16 L12.5 14.15 L18.5 14.15 L18.5 16 Z" fill="currentColor"/><path d="M5.15 18.75 C2.275 18.75 0 16.475 0 13.6 C0 11.725 1 10.35 1.95 9.6 L1.95 3.15 C1.95 1.375 3.35 0 5.15 0 C6.95 0 8.35 1.375 8.35 3.15 L8.35 9.6 C9.3 10.35 10.3 11.725 10.3 13.6 C10.3 16.475 8.025 18.75 5.15 18.75 Z M5.15 16.9 C6.975 16.9 8.4 15.45 8.4 13.6 C8.4 11.95 7.3 10.975 6.45 10.625 L6.45 3.15 C6.45 2.425 5.875 1.85 5.15 1.85 C4.425 1.85 3.85 2.425 3.85 3.15 L3.85 10.625 C3 10.975 1.9 11.95 1.9 13.6 C1.9 15.45 3.325 16.9 5.15 16.9 Z" fill="currentColor"/></svg>'; }
-function svgCheck() { return '<svg xmlns="http://www.w3.org/2000/svg" width="10" height="7.083" viewBox="0 0 10 7.083"><path d="M4.056 7.083 L0 3.027 L1.127 1.888 L4.056 4.853 L8.873 0 L10 1.139 Z" fill="#009245"/></svg>'; }
-
-function dayWeatherIcon(code) {
-  if (code === 0) return svgWxSun();
-  if (code <= 2) return svgWxPartlyCloudy();
-  if (code === 3) return svgWxCloud();
-  if (code === 45 || code === 48) return svgWxFog();
-  if (code >= 51 && code <= 67) return svgWxRain();
-  if (code >= 71 && code <= 77) return svgWxSnow();
-  if (code >= 80 && code <= 82) return svgWxRain();
-  if (code >= 95) return svgWxThunder();
-  return svgWxCloud();
+function getBarLevel(hr, srH, ssH, wind, gust, rain) {
+  if (wind >= 8 || gust >= 12 || rain >= 2) return 'low';
+  let dSr = Math.abs(hr - srH); let dSs = Math.abs(hr - ssH);
+  if (dSr > 12) dSr = 24 - dSr; if (dSs > 12) dSs = 24 - dSs;
+  if (dSr <= 1 || dSs <= 1) return 'high';
+  if (dSr <= 3 || dSs <= 3) return 'mid';
+  return 'low';
 }
 
-function renderChart(pSlice, dark, todayIdx) {
-  var W = 340, H = 110, padSide = 20, padTop = 28, chartH = 55;
-  var n = pSlice.length;
-  var stepX = n > 1 ? (W - padSide * 2) / (n - 1) : 0;
-  var vals = [];
-  pSlice.forEach(function(d) { if (d.pMean != null) vals.push(d.pMean); });
-  var pMin = vals.length ? Math.min.apply(null, vals) : 990;
-  var pMax = vals.length ? Math.max.apply(null, vals) : 1010;
-  var range = pMax - pMin; if (range < 4) range = 4;
-  pMin = pMin - range * 0.2; pMax = pMax + range * 0.2;
-  var fullRange = pMax - pMin;
-  var pts = pSlice.map(function(d, i) {
-    if (d.pMean == null) return null;
-    var x = padSide + i * stepX;
-    var y = padTop + (1 - (d.pMean - pMin) / fullRange) * chartH;
-    return { x: x, y: y, val: d.pMean };
-  });
-  var lineColor = dark ? '#a0a0a0' : '#4a4a4a';
-var dotFill = dark ? '#ffffff' : '#4a4a4a';
-  var todayColor = dark ? '#4ade80' : '#009245';
-  var dotStroke = dark ? '#0d0d0d' : '#faf9f5';
-  var gridColor = dark ? '#2a2a2a' : '#d8d4ca';
-  var valueColor = dark ? '#7a7a7a' : '#999';
-  var grid = '', dots = '', labels = '';
-  pts.forEach(function(pt, i) {
-    if (!pt) return;
-    var isToday = (i === todayIdx);
-    grid += '<line x1="' + pt.x.toFixed(1) + '" y1="' + pt.y.toFixed(1) + '" x2="' + pt.x.toFixed(1) + '" y2="' + (H - 4) + '" stroke="' + (isToday ? todayColor : gridColor) + '" stroke-width="' + (isToday ? '1.2' : '0.6') + '" stroke-dasharray="2 3"/>';
-    labels += '<text x="' + pt.x.toFixed(1) + '" y="' + (pt.y - 9).toFixed(1) + '" font-size="10" font-weight="' + (isToday ? '700' : '500') + '" fill="' + (isToday ? (dark ? '#ececec' : '#0a0a0a') : valueColor) + '" text-anchor="middle">' + Math.round(pt.val) + '</text>';
-  });
-  var pathD = '', started = false;
-  pts.forEach(function(pt) { if (!pt) { started = false; return; } if (!started) { pathD += 'M' + pt.x.toFixed(1) + ' ' + pt.y.toFixed(1); started = true; } else { pathD += 'L' + pt.x.toFixed(1) + ' ' + pt.y.toFixed(1); } });
-  pts.forEach(function(pt, i) {
-    if (!pt) return;
-    var isToday = (i === todayIdx);
-    dots += '<circle cx="' + pt.x.toFixed(1) + '" cy="' + pt.y.toFixed(1) + '" r="' + (isToday ? 5.5 : 4.5) + '" fill="' + (isToday ? todayColor : dotFill) + '" stroke="' + dotStroke + '" stroke-width="3"/>';
-  });
-  return '<svg class="chart-svg" viewBox="0 0 ' + W + ' ' + H + '" preserveAspectRatio="xMidYMid meet">' + grid +
-    (pathD ? '<path d="' + pathD + '" fill="none" stroke="' + lineColor + '" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/>' : '') + dots + labels + '</svg>';
-}
-
-function lessonsHTML() {
-  return '<h3>Читай приложение</h3>' +
-    '<div class="row"><span class="k">Баллы</span><span class="v">0–100. 70+ зелёным, ниже серым</span></div>' +
-    '<div class="row"><span class="k">Время</span><span class="v">Два окна — утро и вечер. Первое жирное — лучшее</span></div>' +
-    '<div class="row"><span class="k">Прогресс-бар</span><span class="v">Давление с 6:00 до 18:00</span></div>' +
-    '<div class="row"><span class="k">График</span><span class="v">Давление на 5 дней. Зелёная точка — сегодня</span></div>' +
-    '<div class="row"><span class="k">Улов</span><span class="v">Отмечай каждый выход. Через 30–50 записей увидишь калибровку</span></div>' +
-    '<h3>Как читать погоду</h3>' +
-    '<h4>Давление</h4>' +
-    '<p><strong>Главное — не значение, а изменение за 24 часа.</strong></p>' +
-    '<p>Менее 1 гПа — стабильно, рыба активна.<br>1–3 — слабый сдвиг, клёв есть.<br>3–6 — заметный скачок, рыба на глубине.<br>Более 6 — резкий скачок, клёв слабый 1–2 дня.</p>' +
-    '<h4>Ветер</h4>' +
-    '<p>Западный / Юго-западный — тёплый, рыба активнее. Восточный / Северный — холодный, клёв хуже.</p>' +
-    '<p>3–6 м/с — идеально. Штиль — пассивно. Более 9 — плохо. Порывы более 12 — не выходить.</p>' +
-    '<h4>Облачность и дождь</h4>' +
-    '<p>Пасмурно (60–100%) — рыба смелее. Ясно — рыба в тени. Морось 0–3 мм — активизирует. Ливень — загоняет на глубину.</p>' +
-    '<h3>Важно</h3>' +
-    '<div class="row"><span class="k">Норма</span><span class="v">до 5 кг / сутки + 1 трофей</span></div>' +
-    '<div class="row"><span class="k">Щука</span><span class="v">мин. 65 см, 1 шт/сутки</span></div>' +
-    '<div class="row"><span class="k">Голавль</span><span class="v">мин. 30 см</span></div>' +
-    '<div class="row"><span class="k">Нерест щуки</span><span class="v">01.03–30.04</span></div>' +
-    '<div class="row"><span class="k">Без билета</span><span class="v">штраф 30–90 €</span></div>' +
-    '<div class="row"><span class="k">Нарушение</span><span class="v">штраф 120–300 € + ущерб</span></div>' +
-    '<div class="row"><span class="k">Охрана</span><span class="v">+370 700 02022 / 112</span></div>' +
-    '<h3>Здесь и сейчас</h3>' +
-    '<h4>Пабрадский пруд</h4>' +
-    '<p>Средняя глубина 3–4 м. Основная рыба: лещ, плотва, окунь.</p>' +
-    '<p><strong>У плотины</strong> — ловить запрещено ближе 100 м (штраф). Опасно: сброс воды, течение 2–3 м/с.</p>' +
-    '<p><strong>Нижняя часть</strong> — стоячая вода, лещ и карась. <strong>Отмель у моста</strong> — безопасно, глубина ~0.5 м.</p>' +
-    '<h4>Безопасность</h4>' +
-    '<p>Мостики без перил, течение под плотиной 2–3 м/с. <strong>Опасно:</strong> сброс воды, ближе 100 м от плотины.</p>' +
-    '<p><strong>Безопасно:</strong> отмель у моста, 150 м вниз от плотины, глубина ~0.5 м. С ребёнком — только там, в жилете.</p>' +
-    '<h3>Дисклеймер</h3>' +
-    '<p style="font-size:13px;color:var(--ink-3)">Приложение носит рекомендательный характер. Автор не несёт ответственности за решения, принятые на основе прогноза. Всегда соблюдайте правила рыболовства и технику безопасности на воде.</p>';
-}
-function weatherDesc(code) {
-  if (code === 0) return 'Ясно';
-  if (code <= 2) return 'Переменная облачность';
-  if (code === 3) return 'Пасмурно';
-  if (code === 45 || code === 48) return 'Туман';
-  if (code >= 51 && code <= 57) return 'Морось';
-  if (code >= 61 && code <= 67) return 'Дождь';
-  if (code >= 71 && code <= 77) return 'Снег';
-  if (code >= 80 && code <= 82) return 'Ливень';
-  if (code >= 95) return 'Гроза';
-  return 'Облачно';
-}
-function fmtTimePlain(start, end) { return String(start) + ':00-' + String(end) + ':00'; }
-function oppositeShore(deg) { var dirs = ['северного','северо-восточного','восточного','юго-восточного','южного','юго-западного','западного','северо-западного']; return dirs[Math.round(deg / 45) % 8]; }
-
-function dayDetailHTML(p, di) {
-  var d = p.days[di], hours = p.hourlyByDay[di];
-  var dd = new Date(d.date + 'T12:00:00');
-  var tempSum = 0, tempCnt = 0, windSum = 0, windCnt = 0, pressSum = 0, pressCnt = 0, cloudSum = 0, cloudCnt = 0, rainSum = 0, gustMax = 0, waterTemp = 12;
-  hours.forEach(function(hr) {
-    if (!hr) return;
-    if (hr.airTemp != null) { tempSum += hr.airTemp; tempCnt++; }
-    if (hr.windSpeed != null) { windSum += hr.windSpeed; windCnt++; }
-    if (hr.pressure != null) { pressSum += hr.pressure; pressCnt++; }
-    if (hr.cloudCover != null) { cloudSum += hr.cloudCover; cloudCnt++; }
-    if (hr.rain != null) rainSum += hr.rain;
-    if (hr.windGust != null) gustMax = Math.max(gustMax, hr.windGust);
-    if (hr.waterTemp != null) waterTemp = hr.waterTemp;
-  });
-  var airAvg = tempCnt ? Math.round(tempSum / tempCnt) : '—';
-  var windAvg = windCnt ? (windSum / windCnt).toFixed(1) : '—';
-  var pressAvg = pressCnt ? Math.round(pressSum / pressCnt) : '—';
-  var cloudAvg = cloudCnt ? Math.round(cloudSum / cloudCnt) : '—';
-  var noon = hours[12];
-  var deltaStr = noon && noon.pressureDelta != null ? (noon.pressureDelta >= 0 ? '+' : '') + noon.pressureDelta.toFixed(1) : '—';
-  var fishScores = {};
-  ORDER.forEach(function(k) { fishScores[k] = dayScore(hours, k, d.srH, d.ssH); });
-  var bestFish = ORDER.reduce(function(a, b) { return fishScores[a] > fishScores[b] ? a : b; });
-  var avgScore = Math.round(ORDER.reduce(function(s, k) { return s + fishScores[k]; }, 0) / ORDER.length);
-  var hS = hours.map(function(hr) { return hourScore(hr, bestFish, d.srH, d.ssH); });
-  var wins = findWindows(hS);
-  var bestWin = wins.length ? fmtTimePlain(wins[0].start, wins[0].end) : '—';
-  var wDirName = dirName(d.wDir);
-  var dayLen = d.ssH - d.srH;
-  var dayHrs = Math.floor(dayLen);
-  var dayMins = Math.round((dayLen - dayHrs) * 60);
-  var dayLenStr = dayHrs + 'ч ' + dayMins + 'м';
-  var html = '';
-  html += '<div class="day-hd"><div class="day-hd-ico">' + dayWeatherIcon(d.wCode) + '</div><div class="day-hd-txt"><div class="day-hd-title">' + weatherDesc(d.wCode) + '</div></div></div>';
-  html += '<h3>Клёв</h3>';
-  html += '<div class="row"><span class="k">Средний балл</span><span class="v">' + avgScore + '/100</span></div>';
-  html += '<div class="row"><span class="k">Лучшая рыба</span><span class="v">' + SPECIES[bestFish].name + ' · ' + fishScores[bestFish] + '</span></div>';
-  html += '<div class="row"><span class="k">Лучшее окно</span><span class="v">' + bestWin + '</span></div>';
-  html += '<h3>Погода</h3>';
-  html += '<div class="row"><span class="k">Воздух днём</span><span class="v">' + Math.round(num(d.tMax, 0)) + '°</span></div>';
-  html += '<div class="row"><span class="k">Воздух ночью</span><span class="v">' + Math.round(num(d.tMin, 0)) + '°</span></div>';
-  html += '<div class="row"><span class="k">Вода</span><span class="v">' + Math.round(waterTemp) + '°</span></div>';
-  html += '<div class="row"><span class="k">Облачность</span><span class="v">' + cloudAvg + '%</span></div>';
-  html += '<div class="row"><span class="k">Осадки</span><span class="v">' + rainSum.toFixed(1) + ' мм</span></div>';
-  html += '<h3>Ветер</h3>';
-  html += '<div class="row"><span class="k">Скорость</span><span class="v">' + windAvg + ' м/с</span></div>';
-  html += '<div class="row"><span class="k">Направление</span><span class="v">' + wDirName + '</span></div>';
-  html += '<div class="row"><span class="k">Порывы</span><span class="v">до ' + Math.round(gustMax) + ' м/с</span></div>';
-  html += '<div class="row"><span class="k">Совет</span><span class="v">лови у ' + oppositeShore(d.wDir) + ' берега</span></div>';
-  html += '<h3>Давление</h3>';
-  html += '<div class="row"><span class="k">Среднее</span><span class="v">' + pressAvg + ' гПа</span></div>';
-  html += '<div class="row"><span class="k">Δ за сутки</span><span class="v">' + deltaStr + ' гПа</span></div>';
-  html += '<h3>Солнце</h3>';
-  html += '<div class="row"><span class="k">Восход</span><span class="v">' + fmtSunTime(d.sunrise) + '</span></div>';
-  html += '<div class="row"><span class="k">Закат</span><span class="v">' + fmtSunTime(d.sunset) + '</span></div>';
-  html += '<div class="row"><span class="k">Долгота дня</span><span class="v">' + dayLenStr + '</span></div>';
-  return html;
-}
-
-function speciesInfoHTML(k, s, sc) {
-  var info = SPECIES_INFO[k];
-  var np = getNowParts();
-  var mo = np.month, day = np.day;
-  var isPike = (k === 'pike');
-  var pikeInBan = isPike && ((mo === 3) || (mo === 4) || (mo === 5 && day <= 15));
-  var html = '';
-  html += '<h3>Клёв сегодня</h3>';
-  html += '<div class="row"><span class="k">Балл</span><span class="v">' + sc + '/100</span></div>';
-  html += '<div class="row"><span class="k">Сезон</span><span class="v">' + s.season + '</span></div>';
-  html += '<h3>Типичный вес</h3>';
-  html += '<div class="row"><span class="k">Пабраде</span><span class="v">' + info.weight + '</span></div>';
-  html += '<h3>Норма и размер</h3>';
-  html += '<div class="row"><span class="k">Дневная норма</span><span class="v">' + info.norm + '</span></div>';
-  html += '<div class="row"><span class="k">Мин. размер</span><span class="v">' + info.minSize + '</span></div>';
-  if (info.fine !== '—') {
-    html += '<h3>Штрафы</h3>';
-    html += '<div class="row"><span class="k">Нарушение</span><span class="v">' + info.fine + '</span></div>';
-    html += '<div class="row"><span class="k">Без билета</span><span class="v">30–90 €</span></div>';
-  }
-  html += '<h3>Запрет</h3>';
-  if (isPike) {
-    if (pikeInBan) html += '<div class="row ban-row"><span class="k">Нерест</span><span class="v">до 30.04</span></div>';
-    else html += '<div class="row ban-row"><span class="k">Нерест</span><span class="v">01.03–30.04</span></div>';
-  }
-  if (info.ban !== '—' && !isPike) html += '<div class="row ban-row"><span class="k">Сезон</span><span class="v">' + info.ban + '</span></div>';
-  if (k !== 'pike') html += '<p style="font-size:13px;color:var(--ink-3);margin-top:8px">Общий весенний нерестовый и осенний лососёвый запреты этого вида не касаются. Ловить можно весь год с билетом ALIS.</p>';
-  return html;
-}
-
-function openModal(title, sub, bodyHtml) {
-  document.getElementById('mcTitle').textContent = title;
-  document.getElementById('mcSub').textContent = sub || '';
-  document.getElementById('mcBody').innerHTML = bodyHtml;
-  document.getElementById('ov').classList.add('a');
-}
-function closeModal() { document.getElementById('ov').classList.remove('a'); }
-function showToast(text) {
-  var t = document.createElement('div');
-  t.className = 'toast'; t.textContent = text;
-  document.body.appendChild(t);
-  requestAnimationFrame(function() { t.classList.add('show'); });
-  setTimeout(function() { t.classList.remove('show'); }, 2000);
-  setTimeout(function() { if (t.parentNode) t.parentNode.removeChild(t); }, 2300);
-}
-
-function journalHTML() {
-  var currentSp = state.selected || ORDER[0];
-  var chk = svgCheck();
-  var html = '';
-  html += '<div class="species-grid" id="catchSpecies">';
-  ORDER.forEach(function(k) { html += '<button class="species-btn' + (k === currentSp ? ' sel' : '') + '" data-sp="' + k + '">' + SPECIES[k].name + '<span class="chk-wrap">' + chk + '</span></button>'; });
-  html += '</div>';
-  html += '<div class="catch-actions">';
-  html += '<button class="catch-btn yes" data-caught="1">Поймал</button>';
-  html += '<button class="catch-btn no" data-caught="0">Пусто</button>';
-  html += '</div>';
-  var j = getJournal();
-  if (!j.length) {
-    html += '<h3>Статистика</h3>';
-    html += '<p style="font-size:13px;color:var(--ink-3);line-height:1.5">Пока пусто. Жми «Поймал» или «Пусто» после каждой рыбалки — через 30–50 записей увидишь, сбываются ли баллы.</p>';
-    return html;
-  }
-  var total = j.length;
-  var caught = j.filter(function(e) { return e.caught; }).length;
-  var rate = Math.round(caught / total * 100);
-  html += '<h3>Статистика</h3>';
-  html += '<div class="row"><span class="k">Всего</span><span class="v">' + total + ' отметок</span></div>';
-  html += '<div class="row"><span class="k">Поймал</span><span class="v">' + caught + ' (' + rate + '%)</span></div>';
-  var buckets = [{label:'85–100',min:85,max:101},{label:'70–85',min:70,max:85},{label:'55–70',min:55,max:70},{label:'40–55',min:40,max:55},{label:'0–40',min:0,max:40}];
-  html += '<h3>Точность баллов</h3>';
-  var anyBucket = false;
-  buckets.forEach(function(b) {
-    var t = 0, c = 0;
-    j.forEach(function(e) { if (e.score >= b.min && e.score < b.max) { t++; if (e.caught) c++; } });
-    if (t === 0) return;
-    anyBucket = true;
-    var pct = Math.round(c / t * 100);
-    html += '<div class="bucket-row"><div>' + b.label + '</div><div class="bucket-bar"><div class="bucket-fill" style="width:' + pct + '%"></div></div><div class="bucket-val"><span class="pct">' + pct + '%</span> <span class="frac">' + c + '/' + t + '</span></div></div>';
-  });
-  if (!anyBucket) html += '<p style="font-size:13px;color:var(--ink-3)">Нет данных по баллам.</p>';
-  var bySp = {};
-  j.forEach(function(e) { if (!bySp[e.species]) bySp[e.species] = { t: 0, c: 0 }; bySp[e.species].t++; if (e.caught) bySp[e.species].c++; });
-  var spKeys = Object.keys(bySp);
-  if (spKeys.length) {
-    html += '<h3>По рыбе</h3>';
-    spKeys.sort(function(a, b) { return bySp[b].t - bySp[a].t; });
-    spKeys.forEach(function(k) {
-      var s = SPECIES[k]; var name = s ? s.name : k; var d = bySp[k]; var pct = Math.round(d.c / d.t * 100);
-      html += '<div class="row"><span class="k">' + name + '</span><span class="v">' + d.c + '/' + d.t + ' · ' + pct + '%</span></div>';
-    });
-  }
-  html += '<h3>Последние записи</h3>';
-  j.slice(-15).reverse().forEach(function(e) {
-    var sp = SPECIES[e.species]; var name = sp ? sp.name : e.species;
-    html += '<div class="journal-row"><div class="j-date">' + fmtJournalDate(e.ts) + '</div><div class="j-sp">' + name + '</div><div class="j-score">' + e.score + '</div><div class="j-res ' + (e.caught ? 'yes' : 'no') + '">' + (e.caught ? '🐟' : '—') + '</div></div>';
-  });
-  html += '<h3>Сброс</h3>';
-  html += '<button id="journalReset" style="color:var(--danger);font-size:14px;font-weight:600;padding:6px 0">Удалить все записи</button>';
-  return html;
-}
-
-function bindJournalHandlers() {
-  var grid = document.getElementById('catchSpecies');
-  var chosen = state.selected || ORDER[0];
-  grid.querySelectorAll('.species-btn').forEach(function(btn) {
-    btn.addEventListener('click', function() {
-      grid.querySelectorAll('.species-btn').forEach(function(b) { b.classList.remove('sel'); });
-      this.classList.add('sel');
-      chosen = this.getAttribute('data-sp');
-    });
-  });
-  document.querySelectorAll('.catch-btn').forEach(function(btn) {
-    btn.addEventListener('click', function() {
-      var caught = this.getAttribute('data-caught') === '1';
-      var snap = makeSnapshot(chosen);
-      if (!snap) { closeModal(); return; }
-      snap.caught = caught;
-      addEntry(snap);
-      showToast(caught ? 'Записано' : 'Записано — пусто');
-      document.getElementById('mcBody').innerHTML = journalHTML();
-      bindJournalHandlers();
-    });
-  });
-  var resetBtn = document.getElementById('journalReset');
-  if (resetBtn) {
-    resetBtn.addEventListener('click', function() {
-      if (confirm('Удалить все записи журнала? Это нельзя отменить.')) {
-        saveJournal([]);
-        document.getElementById('mcBody').innerHTML = journalHTML();
-        bindJournalHandlers();
-        showToast('Журнал очищен');
-      }
-    });
-  }
-}
-function openJournalModal() { openModal('Улов', '', journalHTML()); bindJournalHandlers(); }
-
-function render(p) {
-  var days = p.days, tIdx = p.tIdx, hourlyByDay = p.hourlyByDay;
-  var today = days[tIdx];
-  var airMax = today.tMax != null ? Math.round(today.tMax) : '—';
-  var airMin = today.tMin != null ? Math.round(today.tMin) : '—';
-  document.getElementById('hdLogo').innerHTML = svgLogo();
-  var sunCol = sunColor(today.wCode);
-  document.getElementById('hdR').innerHTML = svgSunrise(sunCol) + '<span>' + fmtSunTime(today.sunrise) + '-' + fmtSunTime(today.sunset) + '</span>';
-
-  var firstHr = null;
-  for (var fi = 0; fi < hourlyByDay[tIdx].length; fi++) { if (hourlyByDay[tIdx][fi]) { firstHr = hourlyByDay[tIdx][fi]; break; } }
-  var curWater = firstHr ? Math.round(firstHr.waterTemp) : 15;
-  var scores = {};
-  ORDER.forEach(function(k) { scores[k] = dayScore(hourlyByDay[tIdx], k, today.srH, today.ssH); });
-  var nowParts = getNowParts();
-  var moNow = nowParts.month, daNow = nowParts.day;
-  var inSpawningBan = (moNow === 3) || (moNow === 4) || (moNow === 5 && daNow <= 15);
-  var banLabel = getBanLabel(nowParts);
-  if (!state.selected || ORDER.indexOf(state.selected) === -1) {
-    var bestK = ORDER[0];
-    ORDER.forEach(function(k) { if (scores[k] > scores[bestK]) bestK = k; });
-    state.selected = bestK;
-  }
-  var selected = state.selected;
-  var nowH = nowParts.hour;
-  var nowMin = nowParts.minute;
-  var nowIdx = Math.max(0, Math.min(hourlyByDay[tIdx].length - 1, nowH));
-  var curHr = hourlyByDay[tIdx][nowIdx] || firstHr;
-  if (!curHr) { document.getElementById('app').innerHTML = '<div class="err">Нет данных</div>'; return; }
-  var dp = num(curHr.pressureDelta, 0), dpA = Math.abs(dp);
-  var gust = num(curHr.windGust, 0);
-  var gustMax = Math.round(num(curHr.windGust, 0));
-  var gustTxt = gust > curHr.windSpeed * 1.2 ? ', порывы ' + Math.round(gust) : '';
-  var windEval = curHr.windSpeed < 1 ? 'Штиль — нужна тонкая снасть' : curHr.windSpeed < 3 ? 'Слабый — рябь, рыба смелее' : curHr.windSpeed <= 6 ? 'Оптимальный для ловли' : curHr.windSpeed <= 9 ? 'Умеренный — лови у берега' : 'Сильный — рыба на глубине';
-  var cc = today.cMean != null ? Math.round(today.cMean) : '—';
-  var ccN = cc === '—' ? null : +cc;
-  var fishWins = {};
-  ORDER.forEach(function(k) {
-    var hS = hourlyByDay[tIdx].map(function(hr) { return hourScore(hr, k, today.srH, today.ssH); });
-    var w = findWindows(hS);
-    fishWins[k] = w.length ? w.map(function(x) { return fmtTime(x.start, x.end); }) : [];
-  });
-  var orderKeys = ORDER.slice().sort(function(a, b) { return scores[b] - scores[a]; });
-  if (banLabel) {
-    for (var bi = orderKeys.length - 1; bi >= 0; bi--) {
-      if (orderKeys[bi] === 'pike') { var bannedKey = orderKeys[bi]; orderKeys.splice(bi, 1); orderKeys.push(bannedKey); break; }
-    }
-  }
-  var verdict;
-  if (gust > 12) verdict = 'Порывы ' + Math.round(gust) + ' м/с — не выходить';
-  else if (dpA >= 6) verdict = 'Резкий скачок — сегодня лучше дома';
-  else if (dpA < 1 && curHr.windSpeed >= 3 && curHr.windSpeed <= 6) verdict = 'Стабильно — рыба активна';
-  else verdict = 'Средние условия — клёв есть';
-
-  var infoLines = [];
-  infoLines.push({ bold: true, text: verdict });
-  infoLines.push({ keep: true, text: 'Ветер ' + Math.round(curHr.windSpeed) + ' м/с ' + dirName(curHr.windDir) + gustTxt });
-  infoLines.push(windEval);
-  var pressLabel = dp > 0 ? 'растёт' : dp < 0 ? 'падает' : 'стабильно';
-  infoLines.push('Давление ' + pressLabel + ', Δ ' + dpA.toFixed(1) + ' гПа за 24 ч');
-  var waterNote;
-  if (curWater < 6) waterNote = 'холодная — рыба пассивна';
-  else if (curWater < 10) waterNote = 'прохладная — хищник активнее';
-  else if (curWater <= 22) waterNote = 'комфорт для большинства видов';
-  else waterNote = 'тёплая — ищи на глубине';
-  infoLines.push('Вода ' + curWater + '° — ' + waterNote);
-  var selNameGen = { perch: 'окуня', pike: 'щуки', roach: 'плотвы', chub: 'голавля', bream: 'леща', crucian: 'карася' }[selected] || 'рыбы';
-  var selWins = fishWins[selected] || [];
-  if (selWins.length > 0) {
-    infoLines.push({ keep: true, text: 'Лучшее окно для ' + selNameGen + ' — ' + selWins[0].replace(/:00/g, '').replace(/<[^>]+>/g, '') });
-  }
-  if (ccN != null) {
-    if (ccN >= 80) infoLines.push('Пасмурно ' + ccN + '% — рыба смелее');
-    else if (ccN >= 40) infoLines.push('Переменная облачность ' + ccN + '%');
-    else infoLines.push('Ясно ' + ccN + '% — рыба в тени');
-  }
-  if (gust > 9) infoLines.push('Порывы до ' + Math.round(gust) + ' м/с — ' + (gust > 12 ? 'не выходить' : 'осторожно у берега'));
-
-  var wDir = dirName(curHr.windDir);
-  var rainProb = 5;
-  if (ccN != null) {
-    if (ccN >= 80) rainProb = 40;
-    else if (ccN >= 60) rainProb = 25;
-    else if (ccN >= 30) rainProb = 10;
-    if (num(curHr.rain,0) > 0) rainProb = Math.min(90, rainProb + 30);
-  }
-  var dStart = Math.max(0, tIdx - 2);
-  var dEnd = Math.min(days.length, tIdx + 3);
-  if (dEnd - dStart < 5) {
-    if (dStart === 0) dEnd = Math.min(days.length, 5);
-    else if (dEnd === days.length) dStart = Math.max(0, days.length - 5);
-  }
-  var pSlice = days.slice(dStart, dEnd);
-  var todayInSlice = tIdx - dStart;
-  var hourFloat = nowH + nowMin / 60;
-  var hStart = 6, hEnd = 18;
-  var barPct = 0;
-  if (hourFloat <= hStart) barPct = 0;
-  else if (hourFloat >= hEnd) barPct = 100;
-  else barPct = (hourFloat - hStart) / (hEnd - hStart) * 100;
-  var dark = document.documentElement.getAttribute('data-theme') === 'dark';
-  var html = '';
-  var showBanner = false;
+async function init() {
+  const now = new Date();
   try {
-    var lastShown = localStorage.getItem('klew_banner_date') || '';
-    var todayKey = nowParts.year + '-' + nowParts.month + '-' + nowParts.day;
-    if (lastShown !== todayKey) { if (state.launchCount % 5 === 0) { showBanner = true; localStorage.setItem('klew_banner_date', todayKey); } }
-  } catch(e) {}
-  html += '<div class="rules-banner' + (showBanner ? ' show' : '') + '" id="rulesBanner">';
-  html += 'Запрет ловли с 16.10 по 25.12';
-  html += '<span class="close-x" id="rulesClose">×</span>';
-  html += '</div>';
+    const url = `https://api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LON}&hourly=temperature_2m,wind_speed_10m,wind_direction_10m,wind_gusts_10m,precipitation&daily=sunrise,sunset&past_days=0&forecast_days=2&timezone=${encodeURIComponent(TZ)}&wind_speed_unit=ms`;
+    const res = await fetch(url);
+    const data = await res.json();
+    
+    const fmt = new Intl.DateTimeFormat('en-CA', { timeZone: TZ, year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', hourCycle: 'h23' });
+    const parts = fmt.formatToParts(now);
+    const key = `${parts[0].value}-${parts[1].value}-${parts[2].value}T${parts[3].value}:00`;
+    let idx = data.hourly.time.indexOf(key);
+    if (idx === -1) idx = 0;
 
-  html += '<div class="fish-wrap"><div class="fish-scroll">';
-  orderKeys.forEach(function(k) {
-    var s = scores[k];
-    var cls = '';
-    if (s >= 70) cls = ' great';
-    else if (s < 40) cls = ' low';
-    else if (s < 50) cls = ' mid';
-    var isSel = k === selected;
-    var wins = fishWins[k] || [];
-    var banText = '';
-    if (k === 'pike') { if (inSpawningBan) banText = '30.04'; else if (moNow === 2) banText = '01.03-30.04'; }
-    html += '<div class="fr-c' + cls + (isSel ? ' sel' : '') + '" data-sp="' + k + '">';
-    html += '<span class="fr-s">' + s + '</span>';
-    html += '<span class="fr-n">' + SPECIES[k].name + '</span>';
-    if (wins.length > 0) html += '<span class="fr-t main">' + wins[0] + '</span>';
-    if (banLabel && k === 'pike') html += '<span class="fr-ban">' + banLabel + '</span>';
-    else { if (wins.length > 1) html += '<span class="fr-t sub">' + wins[1] + '</span>'; if (banText) html += '<span class="fr-ban">' + banText + '</span>'; }
-    html += '</div>';
-  });
-  html += '</div></div>';
-  html += '<div class="fish-dots" id="fishDots"><span class="fd active"></span><span class="fd"></span></div>';
+    const sunDate = data.hourly.time[idx].slice(0,10);
+    const dIdx = data.daily.time.indexOf(sunDate);
+    
+    const sunriseIso = data.daily.sunrise[dIdx];
+    const sunsetIso = data.daily.sunset[dIdx];
+    const srH = parseInt(sunriseIso.slice(11,13));
+    const ssH = parseInt(sunsetIso.slice(11,13));
 
-  var p3h_hr = hourlyByDay[tIdx][Math.max(0, nowH - 3)];
-  var p12h_hr = hourlyByDay[tIdx][Math.max(0, nowH - 12)];
-  var d3h = (p3h_hr && p3h_hr.pressure != null && curHr.pressure != null) ? curHr.pressure - p3h_hr.pressure : 0;
-  var d12h = (p12h_hr && p12h_hr.pressure != null && curHr.pressure != null) ? curHr.pressure - p12h_hr.pressure : 0;
+    const slots = [];
+    for (let i = idx; i < idx + 24 && i < data.hourly.time.length; i++) {
+      const timeStr = data.hourly.time[i];
+      const dateStr = timeStr.slice(5, 10);
+      const hr = parseInt(timeStr.slice(11, 13), 10);
+      
+      const wind = data.hourly.wind_speed_10m[i] || 0;
+      const windDir = data.hourly.wind_direction_10m[i];
+      const gust = data.hourly.wind_gusts_10m[i] || 0;
+      const rain = data.hourly.precipitation[i] || 0;
+      const temp = data.hourly.temperature_2m[i] || 0;
+      
+      const level = getBarLevel(hr, srH, ssH, wind, gust, rain);
+      slots.push({ timeStr, dateStr, hr, wind, windDir, gust, rain, temp, level, sunriseIso, sunsetIso });
+    }
 
-  html += '<div class="met">';
-  html += '<div class="met-c"><div class="met-ico">' + svgWater() + '</div><div class="met-v">' + curWater + '<span class="unit">°</span></div><div class="met-l">Вода</div></div>';
-  html += '<div class="met-c"><div class="met-ico">' + svgTemp() + '</div><div class="met-v">' + airMax + '<span class="unit">°</span> <span class="min">' + airMin + '<span class="unit">°</span></span></div><div class="met-l">Воздух</div></div>';
-  html += '<div class="met-c"><div class="met-ico">' + svgRain() + '</div><div class="met-v">' + rainProb + '<span class="unit">%</span></div><div class="met-l">Дождь</div></div>';
-  var windRot = Math.round((curHr.windDir + 180) % 360);
-  html += '<div class="met-c"><div class="met-ico">' + svgWind() + '</div><div class="met-v">' + curHr.windSpeed.toFixed(1) + '<span class="unit"> м/с</span></div><div class="met-l"><span class="wind-dir-arrow" style="transform:rotate(' + windRot + 'deg)"><svg viewBox="0 0 10 10"><path d="M5 0 L8 9 L5 7 L2 9 Z" fill="currentColor"/></svg></span> <span class="dir">' + wDir + '</span>' + (gustMax > 0 ? ' +' + Math.round(gustMax) : '') + '</div></div>';
-  html += '</div>';
+    render(slots);
+    updateExportBtn();
 
-  html += '<div class="press">';
-  var p6v = hourlyByDay[tIdx][6] ? hourlyByDay[tIdx][6].pressure : null;
-  var p9v = hourlyByDay[tIdx][9] ? hourlyByDay[tIdx][9].pressure : null;
-  var p12v = hourlyByDay[tIdx][12] ? hourlyByDay[tIdx][12].pressure : null;
-  var p15v = hourlyByDay[tIdx][15] ? hourlyByDay[tIdx][15].pressure : null;
-  var p18v = hourlyByDay[tIdx][18] ? hourlyByDay[tIdx][18].pressure : null;
-  var p6s = p6v != null ? Math.round(p6v) : '—';
-  var p9s = p9v != null ? Math.round(p9v) : '—';
-  var p12s = p12v != null ? Math.round(p12v) : '—';
-  var p15s = p15v != null ? Math.round(p15v) : '—';
-  var p18s = p18v != null ? Math.round(p18v) : '—';
-  html += '<div class="press-header">';
-  html += '<span class="press-header-gpa">гПа 12 ч</span>';
-  html += '<span class="press-header-cat"><span class="lbl">3 ч</span>' + (d3h >= 0 ? '+' : '') + d3h.toFixed(1) + '</span>';
-  html += '<span class="press-header-time"><span class="lbl">12 ч</span>' + (d12h >= 0 ? '+' : '') + d12h.toFixed(1) + '</span>';
-  html += '</div>';
-  var slotHours = [6, 9, 12, 15, 18];
-  var curSlotIdx = -1;
-  for (var si = slotHours.length - 1; si >= 0; si--) { if (slotHours[si] <= nowH) { curSlotIdx = si; break; } }
-  var pVals = [p6s, p9s, p12s, p15s, p18s];
-  html += '<div class="press-vals">';
-  pVals.forEach(function(val, vi) {
-    var cls = vi < curSlotIdx ? 'past' : vi === curSlotIdx ? 'current' : 'future';
-    html += '<span class="' + cls + '">' + val + '</span>';
-  });
-  html += '</div>';
-  html += '<div class="pbar"><div class="pbar-fill" style="width:' + barPct.toFixed(1) + '%"></div></div>';
-  var slotLabels = ['6:00', '9:00', '12:00', '15:00', '18:00'];
-  var liveTime = nowH + ':' + String(nowMin).padStart(2, '0');
-  var liveIdx = -1;
-  for (var si2 = slotHours.length - 1; si2 >= 0; si2--) { if (slotHours[si2] <= nowH) { liveIdx = si2; break; } }
-  html += '<div class="pbar-times">';
-  slotLabels.forEach(function(label, vi) {
-    var text = vi === liveIdx ? liveTime : label;
-    var cls = '';
-    if (liveIdx >= 0) { if (vi < liveIdx) cls = 'past'; else if (vi === liveIdx) cls = 'current'; }
-    html += '<span class="' + cls + '">' + text + '</span>';
-  });
-  html += '</div>';
-  html += '<div class="chart-wrap">' + renderChart(pSlice, dark, todayInSlice) + '</div>';
-  html += '</div>';
-
-  html += '<div class="chart-days">';
-  for (var i = 0; i < pSlice.length; i++) {
-    var dObj = pSlice[i];
-    var dd = new Date(dObj.date + 'T12:00:00');
-    var di = dStart + i;
-    var topKeys = ['perch', 'pike', 'roach'];
-    var sumTop = 0, cntTop = 0;
-    topKeys.forEach(function(kk) { var sc = dayScore(hourlyByDay[di], kk, days[di].srH, days[di].ssH); sumTop += sc; cntTop++; });
-    var dScore = cntTop ? Math.round(sumTop / cntTop) : 0;
-    var isToday = i === todayInSlice;
-    var isPast = i < todayInSlice;
-    var isFuture = i > todayInSlice;
-    var isGreat = dScore >= 70;
-    var cdCls = (isToday ? ' today' : '') + (isPast ? ' past' : '') + (isFuture ? ' future' : '') + (isGreat && !isPast ? ' great' : '');
-    var temp = Math.round(num(dObj.tMax, 0)) + '°';
-    html += '<div class="cd' + cdCls + '" data-di="' + di + '">';
-    html += '<div class="cd-date">' + RU_DOW[dd.getDay()] + ' ' + dd.getDate() + '</div>';
-    html += '<div class="cd-score">' + dScore + '</div>';
-    html += '<div class="cd-wx">' + dayWeatherIcon(dObj.wCode) + '<span>' + temp + '</span></div>';
-    html += '</div>';
+  } catch (e) {
+    document.getElementById('app').innerHTML = `<div class="hero-title bad">НЕТ СВЯЗИ</div>`;
   }
-  html += '</div>';
+}
 
-  var collapsed = false;
-  try { collapsed = localStorage.getItem('klew_info_collapsed') === '1'; } catch(e) {}
-  var isCold = (gust > 12) || (dpA >= 6);
-  html += '<div class="info' + (isCold ? ' cold' : '') + (collapsed ? ' collapsed' : '') + '" id="infoBlock">';
-  infoLines.forEach(function(t) {
-    if (typeof t === 'string') html += '<div>' + t + '</div>';
-    else if (t.bold) html += '<div class="info-bold">' + t.text + '</div>';
-    else if (t.keep) html += '<div class="info-keep">' + t.text + '</div>';
-    else html += '<div>' + t.text + '</div>';
+function render(slots) {
+  const cur = slots[0];
+  const mmdd = cur.dateStr;
+
+  document.getElementById('h-date').textContent = cur.dateStr.replace('-', '.');
+  document.getElementById('h-wx').textContent = `☁️ ${Math.round(cur.temp)}°`;
+  document.getElementById('h-wind').innerHTML = `${getDirArrow(cur.windDir)} ${cur.wind} м/с <span style="font-size:13px" id="h-gust">+${cur.gust}</span>`;
+
+  let peakIdx = slots.findIndex(s => s.level === 'high');
+
+  let actTitle = '', actClass = '', subTime = '';
+
+  if (cur.wind >= 8 || cur.gust >= 12 || cur.rain >= 2) {
+    actTitle = 'НЕ ЕХАТЬ'; actClass = 'bad'; subTime = 'Опасный ветер/дождь'; peakIdx = -1; 
+  } else if (cur.level === 'high') {
+    actTitle = 'КЛЮЁТ СЕЙЧАС'; actClass = 'good'; subTime = 'Сейчас лучшая фаза';
+  } else if (peakIdx > 0) {
+    actTitle = 'ЖОР'; actClass = 'good';
+    const p = slots[peakIdx];
+    const startStr = p.sunriseIso.slice(11, 16);
+    const endStr = String(parseInt(startStr.slice(0,2)) + 2).padStart(2, '0') + ':' + startStr.slice(3,5);
+    subTime = `${startStr} — ${endStr}`;
+  } else {
+    actTitle = 'СЛАБЫЙ ДЕНЬ'; actClass = 'dim'; subTime = '';
+  }
+
+  let targetsHtml = '';
+  if (peakIdx !== -1) {
+    let list = [];
+    const p = slots[peakIdx];
+    const isMorning = p.hr >= 4 && p.hr < 12;
+    if (isMorning) {
+      if (!isBanned(p.dateStr, RULES.pike)) list.push('Щука');
+      if (!isBanned(p.dateStr, RULES.grayling)) list.push('Хариус');
+      list.push('Окунь');
+    } else {
+      if (!isBanned(p.dateStr, RULES.pike)) list.push('Щука');
+      list.push('Окунь'); list.push('Голавль');
+    }
+    targetsHtml = list.map(t => `<div class="target-item">${t}</div>`).join('');
+  } else {
+    targetsHtml = `<div class="target-item" style="color:var(--fg-dim)">Ничего не активно</div>`;
+  }
+
+  let graphHtml = '';
+  slots.forEach((s, i) => {
+    let cls = `graph-bar ${s.level}`;
+    if (i === 0) cls += ' now';
+    graphHtml += `<div class="${cls}"></div>`;
   });
-  html += '<span class="info-toggle" id="infoToggle"><svg viewBox="0 0 18 11" xmlns="http://www.w3.org/2000/svg"><path d="M2 9 L9 2 L16 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>';
-  html += '</div>';
 
-  html += '<footer class="ft">';
-  html += '<button id="btnJournal">Улов</button>';
-  html += '<button id="btnLessons">Справка</button>';
-  html += '<a href="https://alisas.lt" target="_blank">Alis.lt</a>';
-  html += '</footer>';
+  let bansList = [];
+  if (isBanned(mmdd, RULES.pike)) bansList.push('Щука (до 30.04)');
+  if (isBanned(mmdd, RULES.grayling)) bansList.push('Хариус (до 15.05)');
+  if (isBanned(mmdd, RULES.asp)) bansList.push('Жерех (до 15.05)');
+  if (isBanned(mmdd, RULES.zander)) bansList.push('Судак (до 31.05)');
+  if (mmdd >= '01-01' && mmdd <= '04-30') bansList.push('Живец (до 30.04)');
+
+  document.getElementById('legal-info').innerHTML = bansList.length > 0 
+    ? `<p>Активные запреты:</p><ul style="margin-left: 20px;">${bansList.map(b => `<li>${b}</li>`).join('')}</ul>`
+    : `<p>Сезонных запретов нет.</p>`;
+
+  const html = `
+    <div class="hero">
+      <div class="hero-title ${actClass}">${actTitle}</div>
+      ${subTime ? `<div class="hero-time">${subTime}</div>` : ''}
+    </div>
+    <div class="targets">${targetsHtml}</div>
+    <div class="graph-section">
+      <div class="graph-container">${graphHtml}</div>
+      <div class="graph-labels">
+        <span>Сейчас</span>
+        <span>${String((cur.hr + 6) % 24).padStart(2,'0')}:00</span>
+        <span>${String((cur.hr + 12) % 24).padStart(2,'0')}:00</span>
+        <span>${String((cur.hr + 18) % 24).padStart(2,'0')}:00</span>
+      </div>
+    </div>
+    <button class="diary-trigger" onclick="openDiary()">+ Записать рыбалку</button>
+  `;
 
   document.getElementById('app').innerHTML = html;
 
-  document.querySelectorAll('.fr-c').forEach(function(el) {
-    el.addEventListener('click', function() {
-      var k = this.getAttribute('data-sp');
-      state.selected = k;
-      if (navigator.vibrate) navigator.vibrate(6);
-      render(p);
-      var s = SPECIES[k]; var sc = scores[k];
-      openModal(s.name, s.season, speciesInfoHTML(k, s, sc));
-    });
-  });
-
-  document.querySelectorAll('.cd').forEach(function(el) {
-    el.addEventListener('click', function() {
-      var di = parseInt(this.getAttribute('data-di'), 10);
-      var dd = new Date(p.days[di].date + 'T12:00:00');
-      openModal(RU_DOW[dd.getDay()] + ' ' + dd.getDate(), '', dayDetailHTML(p, di));
-    });
-  });
-
-  document.getElementById('btnLessons').addEventListener('click', function() {
-    openModal('Справка', 'Как читать погоду и ловить рыбу', lessonsHTML());
-  });
-
-  document.getElementById('btnJournal').addEventListener('click', function() {
-    openJournalModal();
-  });
-
-  var infoBlock = document.getElementById('infoBlock');
-  if (infoBlock) {
-    infoBlock.addEventListener('click', function() {
-      var isCollapsed = this.classList.toggle('collapsed');
-      try { localStorage.setItem('klew_info_collapsed', isCollapsed ? '1' : '0'); } catch(e) {}
-    });
-  }
-
-  var closeBtn = document.getElementById('rulesClose');
-  if (closeBtn) {
-    closeBtn.addEventListener('click', function() {
-      document.getElementById('rulesBanner').classList.remove('show');
-    });
-  }
-
-  var scrollEl = document.querySelector('.fish-scroll');
-  var dots = document.querySelectorAll('#fishDots .fd');
-  if (scrollEl && dots.length) {
-    scrollEl.addEventListener('scroll', function() {
-      var w = scrollEl.scrollWidth - scrollEl.clientWidth;
-      var pct = w > 0 ? scrollEl.scrollLeft / w : 0;
-      var idx = Math.round(pct * (dots.length - 1));
-      dots.forEach(function(d, i) { d.classList.toggle('active', i === idx); });
-    }, { passive: true });
-  }
+  diaryState.context = {
+    waterName: "Пруд / Река", 
+    temp: Math.round(cur.temp),
+    wind: cur.wind,
+    gust: cur.gust,
+    rain: cur.rain,
+    windDir: getDirArrow(cur.windDir),
+    phase: (cur.hr >= 4 && cur.hr < 12) ? 'утро' : (cur.hr >= 12 && cur.hr < 18) ? 'день' : 'вечер'
+  };
 }
 
-document.getElementById('mcClose').addEventListener('click', closeModal);
-document.getElementById('ov').addEventListener('click', function(e) { if (e.target === this) closeModal(); });
-document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeModal(); });
+function openDiary() {
+  const ctx = diaryState.context;
+  document.getElementById('d-auto').textContent = `${ctx.waterName} | ${ctx.temp}°C, ветер ${ctx.wind} м/с ${ctx.windDir}, ${ctx.phase}`;
+  
+  document.getElementById('d-water').value = '';
+  document.getElementById('d-depth').value = '';
+  document.getElementById('d-gps-btn').classList.remove('ok');
+  document.getElementById('d-gps-btn').textContent = '📍 Запомнить точку';
+  
+  document.querySelectorAll('.d-buttons button').forEach(b => b.classList.remove('on'));
+  diaryState.fish = null;
+  diaryState.catch = '0';
+  diaryState.clarity = null;
+  diaryState.level = null;
+  diaryState.coords = null;
 
-try {
-  var cnt = parseInt(localStorage.getItem('klew_launches') || '0', 10);
-  state.launchCount = cnt + 1;
-  localStorage.setItem('klew_launches', String(state.launchCount));
-} catch(e) { state.launchCount = 1; }
+  document.getElementById('diaryModal').classList.add('active');
+}
 
-fetchT(buildUrl()).then(function(json) {
-  state.data = processData(json);
-  render(state.data);
-  setInterval(function() { if (state.data) render(state.data); }, 5 * 60 * 1000);
-}).catch(function(e) {
-  console.error(e);
-  document.getElementById('app').innerHTML = '<div class="err">Не удалось загрузить: ' + (e.message || e) + '<br><br>Проверь интернет и обнови страницу</div>';
-});
+function closeDiary() {
+  document.getElementById('diaryModal').classList.remove('active');
+}
+
+function pickBtn(btn, group, val) {
+  btn.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+  diaryState[group] = val;
+}
+
+function getGPS() {
+  const btn = document.getElementById('d-gps-btn');
+  btn.textContent = 'поиск...';
+  navigator.geolocation.getCurrentPosition(pos => {
+    diaryState.coords = pos.coords.latitude.toFixed(5) + ',' + pos.coords.longitude.toFixed(5);
+    btn.textContent = '✓ ' + diaryState.coords;
+    btn.classList.add('ok');
+  }, err => {
+    btn.textContent = '✗ нет GPS';
+    setTimeout(() => { btn.textContent = '📍 Запомнить точку'; }, 2000);
+  }, { enableHighAccuracy: true, timeout: 5000 });
+}
+
+function saveEntry() {
+  const waterTemp = parseFloat(document.getElementById('d-water').value) || null;
+  const depth = parseFloat(document.getElementById('d-depth').value) || null;
+  
+  const entry = {
+    ts: new Date().toISOString(),
+    context: diaryState.context,
+    fish: diaryState.fish,
+    catchCount: diaryState.catch,
+    clarity: diaryState.clarity,
+    level: diaryState.level,
+    waterTemp: waterTemp,
+    depth: depth,
+    coords: diaryState.coords
+  };
+  
+  const diary = JSON.parse(localStorage.getItem('klev_diary') || '[]');
+  diary.push(entry);
+  localStorage.setItem('klev_diary', JSON.stringify(diary));
+  
+  closeDiary();
+  updateExportBtn();
+  alert('✓ Записано. Всего: ' + diary.length);
+}
+
+function updateExportBtn() {
+  const count = JSON.parse(localStorage.getItem('klev_diary') || '[]').length;
+  document.getElementById('d-export-btn').textContent = `↓ Экспорт CSV (${count} записей)`;
+}
+
+function exportCSV() {
+  const diary = JSON.parse(localStorage.getItem('klev_diary') || '[]');
+  if (diary.length === 0) { alert('Дневник пуст'); return; }
+  
+  const headers = ['Дата', 'Время', 'Вода', 'Воздух', 'Ветер', 'Порыв', 'Дождь', 'Фаза', 'Рыба', 'Улов', 'Прозрачность', 'Уровень', 'Т_воды', 'Глубина', 'GPS'];
+  const rows = diary.map(r => {
+    const d = new Date(r.ts);
+    return [
+      d.toLocaleDateString('ru-RU'), d.toLocaleTimeString('ru-RU', {hour: '2-digit', minute:'2-digit'}),
+      r.context.waterName, r.context.temp, r.context.wind, r.context.gust, r.context.rain, r.context.phase,
+      r.fish || '', r.catchCount,
+      r.clarity || '', r.level || '',
+      r.waterTemp || '', r.depth || '',
+      r.coords || ''
+    ];
+  });
+  
+  const csv = [headers.join(';')].concat(rows.map(r => r.map(c => `"${c}"`).join(';'))).join('\n');
+  const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'klev_' + new Date().toISOString().slice(0,10) + '.csv';
+  a.click();
+}
+
+init();
 </script>
 </body>
 </html>
